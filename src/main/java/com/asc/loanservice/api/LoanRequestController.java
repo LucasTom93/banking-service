@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.asc.loanservice.contracts.LoanRequestDataDto;
 import com.asc.loanservice.contracts.LoanRequestDto;
-import com.asc.loanservice.contracts.LoanRequestRegistrationResultDto;
 import com.asc.loanservice.domain.loan.LoanRequestApplicationService;
 import com.asc.loanservice.domain.loan.LoanRequestQueryRepository;
 
@@ -26,9 +25,12 @@ public class LoanRequestController {
     }
 
     @PostMapping
-    public LoanRequestRegistrationResultDto register(@RequestBody LoanRequestDto loanRequest) {
-        //TODO: implement
-        return null;
+    public ResponseEntity<?> register(@RequestBody LoanRequestDto loanRequest) {
+        var loanApplicationServiceResult = loanRequestApplicationService.registerLoanRequest(loanRequest);
+        if (!loanApplicationServiceResult.isInputDataValid()) {
+            return ResponseEntity.badRequest().body(loanApplicationServiceResult.getValidationMessages());
+        }
+        return ResponseEntity.ok().body(loanApplicationServiceResult.getLoanRequestRegistrationResultDto());
     }
 
     @GetMapping("/{loanNumber}")
