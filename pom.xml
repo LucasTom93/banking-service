@@ -27,6 +27,7 @@
         <junit.version>5.7.0</junit.version>
         <mockito-core.version>2.23.4</mockito-core.version>
         <mockito-junit-jupiter.version>${mockito-core.version}</mockito-junit-jupiter.version>
+        <javassist.version>3.23.1-GA</javassist.version>
     </properties>
 
     <dependencies>
@@ -45,7 +46,7 @@
         <dependency>
             <groupId>org.javassist</groupId>
             <artifactId>javassist</artifactId>
-            <version>3.23.1-GA</version>
+            <version>${javassist.version}</version>
         </dependency>
         <dependency>
             <groupId>com.h2database</groupId>
