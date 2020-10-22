@@ -8,7 +8,6 @@ import com.asc.loanservice.domain.validation.LoanRequestValidationResult;
 
 @DataValidator
 class CustomerBirthdayValidator implements LoanRequestDataValidator {
-
     private final Clock clock;
 
     CustomerBirthdayValidator(Clock clock) {
@@ -17,14 +16,14 @@ class CustomerBirthdayValidator implements LoanRequestDataValidator {
 
     @Override
     public LoanRequestValidationResult validate(LoanRequestDto loanRequestDto) {
-//        LocalDate customerBirthday = loanRequestDto.getCustomerBirthday();
-//        if (customerBirthday == null) {
-//            return LoanRequestValidationResult.invalid("Provided empty customer birthday");
-//        }
-//
-//        if (!customerBirthday.isBefore(clock.getCurrentDate())) {
-//            return LoanRequestValidationResult.invalid("Provided customer birthday must be before today");
-//        }
+        var customerBirthday = loanRequestDto.getCustomerBirthday();
+        if (customerBirthday == null) {
+            return LoanRequestValidationResult.invalid("Provided empty customer birthday");
+        }
+
+        if (!customerBirthday.isBefore(clock.getCurrentDate())) {
+            return LoanRequestValidationResult.invalid(String.format("Customer birthday must be before today. Provided %s", customerBirthday));
+        }
 
         return LoanRequestValidationResult.valid();
     }

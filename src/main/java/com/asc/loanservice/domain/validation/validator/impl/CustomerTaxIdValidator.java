@@ -10,6 +10,9 @@ class CustomerTaxIdValidator implements LoanRequestDataValidator {
 
     @Override
     public LoanRequestValidationResult validate(LoanRequestDto loanRequestDto) {
-        return null;
+        if (loanRequestDto.getCustomerTaxId() == null) {
+            return LoanRequestValidationResult.invalid("Provided empty customer tax id");
+        }
+        return LoanRequestValidationResult.valid();
     }
 }

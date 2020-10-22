@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 class LoanValidationConfiguration {
-
     private final Set<LoanRequestDataValidator> loanRequestDataValidators;
 
     LoanValidationConfiguration(Set<LoanRequestDataValidator> loanRequestDataValidators) {

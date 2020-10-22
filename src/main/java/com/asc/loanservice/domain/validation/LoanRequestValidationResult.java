@@ -1,7 +1,6 @@
 package com.asc.loanservice.domain.validation;
 
 public class LoanRequestValidationResult {
-
     private final boolean isValid;
     private final String validationMessage;
 

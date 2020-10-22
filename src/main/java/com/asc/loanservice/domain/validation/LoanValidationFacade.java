@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 import com.asc.loanservice.contracts.LoanRequestDto;
 
 public class LoanValidationFacade {
-
     private final Set<LoanRequestDataValidator> loanRequestDataValidators;
 
     public LoanValidationFacade(Set<LoanRequestDataValidator> loanRequestDataValidators) {

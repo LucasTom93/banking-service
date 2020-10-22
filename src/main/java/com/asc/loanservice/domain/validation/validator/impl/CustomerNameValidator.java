@@ -10,6 +10,10 @@ class CustomerNameValidator implements LoanRequestDataValidator {
 
     @Override
     public LoanRequestValidationResult validate(LoanRequestDto loanRequestDto) {
-        return null;
+        if (loanRequestDto.getCustomerName() == null) {
+            return LoanRequestValidationResult.invalid("Provided empty customer name");
+        }
+
+        return LoanRequestValidationResult.valid();
     }
 }
