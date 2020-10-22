@@ -1,6 +1,9 @@
 package com.asc.loanservice.domain.loan;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.util.StringUtils;
 
 import com.asc.loanservice.contracts.LoanRequestRegistrationResultDto;
 
@@ -30,7 +33,10 @@ public class LoanApplicationServiceResult {
     }
 
     public List<String> getValidationMessages() {
-        return List.copyOf(validationMessages);
+        return validationMessages
+                .stream()
+                .filter(validationMessage -> !StringUtils.isEmpty(validationMessage))
+                .collect(Collectors.toList());
     }
 
     public LoanRequestRegistrationResultDto getLoanRequestRegistrationResultDto() {
