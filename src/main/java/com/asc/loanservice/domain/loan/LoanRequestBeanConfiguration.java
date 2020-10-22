@@ -10,8 +10,4 @@ public class LoanRequestBeanConfiguration {
     public LoanRequestQueryRepository loanRequestQueryRepository() {
         return new LoanRequestQueryJDBCRepository();
     }
-
-    public LoanRequestQueryRepository loanRequestQueryInMemoryRepository() {
-        return new LoanRequestQueryHashMapRepository();
-    }
 }
