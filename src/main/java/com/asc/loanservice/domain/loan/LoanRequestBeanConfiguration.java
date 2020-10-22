@@ -4,14 +4,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class LoanConfiguration {
+public class LoanRequestBeanConfiguration {
 
     @Bean
     public LoanRequestQueryRepository loanRequestQueryRepository() {
         return new LoanRequestQueryJDBCRepository();
     }
 
-    public LoanRequestQueryRepository loanRequestQueryHashMapRepository() {
+    public LoanRequestQueryRepository loanRequestQueryInMemoryRepository() {
         return new LoanRequestQueryHashMapRepository();
     }
 }
