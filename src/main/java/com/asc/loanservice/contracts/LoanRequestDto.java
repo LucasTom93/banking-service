@@ -12,8 +12,32 @@ public class LoanRequestDto {
     private Integer numberOfInstallments;
     private LocalDate firstInstallmentDate;
 
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public LocalDate getCustomerBirthday() {
+        return customerBirthday;
+    }
+
     public String getCustomerTaxId() {
         return customerTaxId;
+    }
+
+    public BigDecimal getCustomerMonthlyIncome() {
+        return customerMonthlyIncome;
+    }
+
+    public BigDecimal getLoanAmount() {
+        return loanAmount;
+    }
+
+    public Integer getNumberOfInstallments() {
+        return numberOfInstallments;
+    }
+
+    public LocalDate getFirstInstallmentDate() {
+        return firstInstallmentDate;
     }
 
     public static final class Builder {

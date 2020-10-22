@@ -16,6 +16,46 @@ public class LoanRequestDataDto {
     private LoanRequestEvaluationResult evaluationResult;
     private LocalDateTime registrationDate;
 
+    public String getLoanRequestNumber() {
+        return loanRequestNumber;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public LocalDate getCustomerBirthday() {
+        return customerBirthday;
+    }
+
+    public String getCustomerTaxId() {
+        return customerTaxId;
+    }
+
+    public BigDecimal getCustomerMonthlyIncome() {
+        return customerMonthlyIncome;
+    }
+
+    public BigDecimal getLoanAmount() {
+        return loanAmount;
+    }
+
+    public Integer getNumberOfInstallments() {
+        return numberOfInstallments;
+    }
+
+    public LocalDate getFirstInstallmentDate() {
+        return firstInstallmentDate;
+    }
+
+    public LoanRequestEvaluationResult getEvaluationResult() {
+        return evaluationResult;
+    }
+
+    public LocalDateTime getRegistrationDate() {
+        return registrationDate;
+    }
+
     public static final class Builder {
         private String loanRequestNumber;
         private String customerName;
