@@ -17,8 +17,6 @@ class LoanRequest {
     @Id
     @Column(name = "LOAN_RESUEST_NUMBER")
     private String loanRequestNumber;
-    @Column(name = "LOAN_REQUEST_TAX_ID", nullable = false)
-    private Double loanRequestTax;
     @Column(name = "LOAN_AMOUNT", nullable = false)
     private BigDecimal loanAmount;
     @Column(name = "NUMBER_OF_INSTALLMENTS", nullable = false)
@@ -50,7 +48,6 @@ class LoanRequest {
 
     static final class Builder {
         private String loanRequestNumber;
-        private Double loanRequestTax;
         private BigDecimal loanAmount;
         private int numberOfInstallments;
         private LocalDate firstInstallmentDate;
@@ -66,11 +63,6 @@ class LoanRequest {
 
         Builder withLoanRequestNumber(String loanRequestNumber) {
             this.loanRequestNumber = loanRequestNumber;
-            return this;
-        }
-
-        Builder withLoanRequestTax(Double loanRequestTax) {
-            this.loanRequestTax = loanRequestTax;
             return this;
         }
 
@@ -104,7 +96,6 @@ class LoanRequest {
             loanRequest.firstInstallmentDate = this.firstInstallmentDate;
             loanRequest.registrationDate = this.registrationDate;
             loanRequest.loanAmount = this.loanAmount;
-            loanRequest.loanRequestTax = this.loanRequestTax;
             loanRequest.numberOfInstallments = this.numberOfInstallments;
             loanRequest.loanRequestEvaluationResult = this.loanRequestEvaluationResult;
             loanRequest.loanRequestNumber = this.loanRequestNumber;
