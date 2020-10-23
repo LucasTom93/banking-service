@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -48,7 +49,7 @@ class LoanRequestApplicationServiceTest {
         var evaluationMessage = "Age is correct";
         var loanRequestEvaluationResultDetails = LoanRequestEvaluationResultDetails.of(LoanRequestEvaluationResult.APPROVED, evaluationMessage);
         when(loanValidationFacade.validateLoanRequest(loanRequestDto)).thenReturn(loanRequestValidationResults);
-        when(clock.getCurrentDate()).thenReturn(LocalDate.now());
+        when(clock.getCurrentLocalDateTime()).thenReturn(LocalDateTime.now());
         when(loanRequestEvaluationFacade.evaluate(loanRequestDto)).thenReturn(Set.of(loanRequestEvaluationResultDetails));
 
         //when

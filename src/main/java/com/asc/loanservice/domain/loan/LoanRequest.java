@@ -2,6 +2,7 @@ package com.asc.loanservice.domain.loan;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 import javax.persistence.Column;
@@ -24,7 +25,7 @@ class LoanRequest {
     @Column(name = "FIRST_INSTALLMENT_DATE", nullable = false)
     private LocalDate firstInstallmentDate;
     @Column(name = "REGISTRATION_DATE", nullable = false)
-    private LocalDate registrationDate;
+    private LocalDateTime registrationDate;
     @Enumerated(EnumType.STRING)
     @Column(name = "EVALUATION_RESULT", nullable = false)
     private LoanRequestEvaluationResult loanRequestEvaluationResult;
@@ -51,7 +52,7 @@ class LoanRequest {
         private BigDecimal loanAmount;
         private int numberOfInstallments;
         private LocalDate firstInstallmentDate;
-        private LocalDate registrationDate;
+        private LocalDateTime registrationDate;
         private LoanRequestEvaluationResult loanRequestEvaluationResult;
 
         private Builder() {
@@ -81,7 +82,7 @@ class LoanRequest {
             return this;
         }
 
-        Builder withRegistrationDate(LocalDate registrationDate) {
+        Builder withRegistrationDate(LocalDateTime registrationDate) {
             this.registrationDate = registrationDate;
             return this;
         }

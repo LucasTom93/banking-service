@@ -43,7 +43,7 @@ public class LoanRequestApplicationService {
         var loanRequestEvaluationDetailsSet = loanRequestEvaluationFacade.evaluate(loanRequestDto);
         var areAllEvaluationRulesApproved = checkAllEvaluationRulesAreApproved(loanRequestEvaluationDetailsSet);
         var loanRequestEvaluationResult = areAllEvaluationRulesApproved ? LoanRequestEvaluationResult.APPROVED : LoanRequestEvaluationResult.REJECTED;
-        var loanRequest = LoanRequestFactory.createLoanRequest(loanRequestDto, loanRequestEvaluationResult, clock.getCurrentDate());
+        var loanRequest = LoanRequestFactory.createLoanRequest(loanRequestDto, loanRequestEvaluationResult, clock.getCurrentLocalDateTime());
 
         loanRequestCommandRepository.save(loanRequest);
 
