@@ -2,6 +2,7 @@ package com.asc.loanservice.contracts;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class LoanRequestDto {
     private String customerName;
@@ -102,5 +103,24 @@ public class LoanRequestDto {
             loanRequestDto.customerTaxId = this.customerTaxId;
             return loanRequestDto;
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        LoanRequestDto that = (LoanRequestDto) o;
+        return Objects.equals(customerName, that.customerName) &&
+                Objects.equals(customerBirthday, that.customerBirthday) &&
+                Objects.equals(customerTaxId, that.customerTaxId) &&
+                Objects.equals(customerMonthlyIncome, that.customerMonthlyIncome) &&
+                Objects.equals(loanAmount, that.loanAmount) &&
+                Objects.equals(numberOfInstallments, that.numberOfInstallments) &&
+                Objects.equals(firstInstallmentDate, that.firstInstallmentDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(customerName, customerBirthday, customerTaxId, customerMonthlyIncome, loanAmount, numberOfInstallments, firstInstallmentDate);
     }
 }
