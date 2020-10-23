@@ -2,10 +2,12 @@ package com.asc.loanservice.api;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.Collections;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -16,16 +18,20 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import com.asc.loanservice.contracts.LoanRequestDataDto;
 import com.asc.loanservice.contracts.LoanRequestDto;
 import com.asc.loanservice.contracts.LoanRequestRegistrationResultDto;
 import com.asc.loanservice.domain.loan.LoanApplicationServiceResult;
 import com.asc.loanservice.domain.loan.LoanRequestApplicationService;
+import com.asc.loanservice.domain.loan.LoanRequestQueryRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @ExtendWith(MockitoExtension.class)
 class LoanRequestControllerTest {
     @Mock
     private LoanRequestApplicationService loanRequestApplicationService;
+    @Mock
+    private LoanRequestQueryRepository loanRequestQueryRepository;
     @InjectMocks
     private LoanRequestController loanRequestController;
     private ObjectMapper objectMapper = new ObjectMapper();
@@ -64,6 +70,22 @@ class LoanRequestControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBodyJson))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    //??No serializer???
+    @Disabled
+    void shouldReturnLOanRequestData() throws Exception {
+        //given
+        var mockMvc = MockMvcBuilders.standaloneSetup(loanRequestController).build();
+        var loanRequestDataDto = mock(LoanRequestDataDto.class);
+        var loanRequestNumber = "123";
+        when(loanRequestQueryRepository.findByLoanNumber(loanRequestNumber)).thenReturn(Optional.of(loanRequestDataDto));
+
+        //when //then
+        mockMvc.perform(get("/api/loans/{loanNumber}", loanRequestNumber)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 
     private String getValidLoanRequestJson() {
