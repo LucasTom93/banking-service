@@ -18,10 +18,11 @@ class CustomerAgeEvaluationRuleTest {
     @Test
     void shouldApproveLoanRequestWhenReachedAgeThresholdAcceptable() {
         //given
-        var loanRequestDto = createLoanRequestDtoForApproval();
+        var customerBirthday = LocalDate.of(2000, Month.JANUARY, 1);
+        var firstInstallmentDate = LocalDate.of(2021, Month.JANUARY, 1);
 
         //when
-        var evaluationResultDetails = customerAgeEvaluationRule.evaluate(loanRequestDto);
+        var evaluationResultDetails = customerAgeEvaluationRule.evaluate(createLoanRequestDto(customerBirthday, firstInstallmentDate));
 
         //then
         assertThat(evaluationResultDetails.getLoanRequestEvaluationResult()).isEqualTo(LoanRequestEvaluationResult.APPROVED);
@@ -31,19 +32,18 @@ class CustomerAgeEvaluationRuleTest {
     @Test
     void shouldNotApproveLoanRequestWhenReachedAgeThresholdIsNotAcceptable() {
         //given
-        var loanRequestDto = createLoanRequestDtoForRejection();
+        var customerBirthday = LocalDate.of(1956, Month.JANUARY, 1);
+        var firstInstallmentDate = LocalDate.of(2020, Month.JANUARY, 1);
 
         //when
-        var evaluationResultDetails = customerAgeEvaluationRule.evaluate(loanRequestDto);
+        var evaluationResultDetails = customerAgeEvaluationRule.evaluate(createLoanRequestDto(customerBirthday, firstInstallmentDate));
 
         //then
         assertThat(evaluationResultDetails.getLoanRequestEvaluationResult()).isEqualTo(LoanRequestEvaluationResult.REJECTED);
         assertThat(evaluationResultDetails.getEvaluationMessage()).isNotBlank();
     }
 
-    private LoanRequestDto createLoanRequestDtoForApproval() {
-        var customerBirthday = LocalDate.of(2000, Month.JANUARY, 1);
-        var firstInstallmentDate = LocalDate.of(2021, Month.JANUARY, 1);
+    private LoanRequestDto createLoanRequestDto(LocalDate customerBirthday, LocalDate firstInstallmentDate) {
         return LoanRequestDto.Builder
                 .loanRequestDto()
                 .withCustomerName("John Doe")
@@ -51,21 +51,6 @@ class CustomerAgeEvaluationRuleTest {
                 .withCustomerMonthlyIncome(BigDecimal.valueOf(10000))
                 .withFirstInstallmentDate(firstInstallmentDate)
                 .withNumberOfInstallments(13)
-                .withCustomerTaxId("1234")
-                .withLoanAmount(BigDecimal.valueOf(1000))
-                .build();
-    }
-
-    private LoanRequestDto createLoanRequestDtoForRejection() {
-        var customerBirthday = LocalDate.of(1956, Month.JANUARY, 1);
-        var firstInstallmentDate = LocalDate.of(2020, Month.JANUARY, 1);
-        return LoanRequestDto.Builder
-                .loanRequestDto()
-                .withCustomerName("John Doe")
-                .withCustomerBirthday(customerBirthday)
-                .withCustomerMonthlyIncome(BigDecimal.valueOf(10000))
-                .withFirstInstallmentDate(firstInstallmentDate)
-                .withNumberOfInstallments(14)
                 .withCustomerTaxId("1234")
                 .withLoanAmount(BigDecimal.valueOf(1000))
                 .build();
