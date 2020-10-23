@@ -2,5 +2,9 @@ package com.asc.loanservice.contracts;
 
 public enum LoanRequestEvaluationResult {
     APPROVED,
-    REJECTED
+    REJECTED;
+
+    public static LoanRequestEvaluationResult fromString(String vale) {
+        return APPROVED.name().equals(vale) ? APPROVED : REJECTED;
+    }
 }
