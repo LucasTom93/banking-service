@@ -11,6 +11,7 @@ import com.asc.loanservice.contracts.LoanRequestEvaluationResult;
 
 @Component
 class CustomerAgeEvaluationRule implements LoanRequestEvaluationRule {
+    //This constant could be taken from system configuration with its default
     private static final int CUSTOMER_AGE_THRESHOLD = 65;
 
     @Override
@@ -28,10 +29,11 @@ class CustomerAgeEvaluationRule implements LoanRequestEvaluationRule {
         var customerBirthday = loanRequestDto.getCustomerBirthday();
         var loanEndDate = firstInstallmentDate.plusMonths(loanDurationInMonths);
         var customerAgeAfterLoanInMonths = Period.between(customerBirthday, loanEndDate).toTotalMonths();
+        var monthsInYear = BigDecimal.valueOf(12);
 
         return BigDecimal
                 .valueOf(customerAgeAfterLoanInMonths)
-                .divide(BigDecimal.valueOf(12), RoundingMode.CEILING)
+                .divide(monthsInYear, RoundingMode.CEILING)
                 .intValue();
     }
 

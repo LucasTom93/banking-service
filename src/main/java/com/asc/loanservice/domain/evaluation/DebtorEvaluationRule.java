@@ -15,19 +15,22 @@ class DebtorEvaluationRule implements LoanRequestEvaluationRule {
 
     @Override
     public LoanRequestEvaluationResultDetails evaluate(LoanRequestDto loanRequestDto) {
+        LoanRequestEvaluationResultDetails resultDetails;
         try {
             var customerCheckResultDto = loanDebtorRegistryCircuitBreaker.checkCustomerDebtorRegistry(loanRequestDto.getCustomerTaxId());
             var isCustomerInDebtorList = Boolean.TRUE.equals(customerCheckResultDto.getRegisteredDebtor());
             if (isCustomerInDebtorList) {
-                return createRejectedResult();
+                resultDetails = createRejectedResult();
+            } else {
+                resultDetails = createApprovedResult();
             }
-            return createApprovedResult();
         } catch (Exception e) {
-            return LoanRequestEvaluationResultDetails.of(
+            resultDetails = LoanRequestEvaluationResultDetails.of(
                     LoanRequestEvaluationResult.REJECTED,
                     "Could not connect to debtor-registry service"
             );
         }
+        return resultDetails;
     }
 
     private LoanRequestEvaluationResultDetails createApprovedResult() {

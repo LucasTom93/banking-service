@@ -10,12 +10,15 @@ import com.asc.loanservice.contracts.LoanRequestEvaluationResult;
 
 @Component
 class MonthlyInstallmentEvaluationRule implements LoanRequestEvaluationRule {
+    //All these constants could be taken from system configuration with theirs defaults
     private static final int BIG_DECIMAL_SCALE = 5;
+    private static final BigDecimal PERCENTAGE_RISK_THRESHOLD = BigDecimal.valueOf(0.15);
+    private static final BigDecimal NUMBER_OF_INSTALLMENTS_IN_YEAR = BigDecimal.valueOf(12);
+    private static final BigDecimal ANNUAL_LOAN_TAX_RATE = BigDecimal.valueOf(0.04);
 
     @Override
     public LoanRequestEvaluationResultDetails evaluate(LoanRequestDto loanRequestDto) {
-        var monthlyIncomePercentageThreshold = loanRequestDto.getCustomerMonthlyIncome().multiply(BigDecimal.valueOf(0.15)).setScale(BIG_DECIMAL_SCALE,
-                RoundingMode.HALF_UP);
+        var monthlyIncomePercentageThreshold = loanRequestDto.getCustomerMonthlyIncome().multiply(PERCENTAGE_RISK_THRESHOLD).setScale(BIG_DECIMAL_SCALE, RoundingMode.HALF_UP);
         var loanInstallmentAmount = calculateSingleInstallmentAmount(loanRequestDto);
 
         if (loanInstallmentAmount.compareTo(monthlyIncomePercentageThreshold) > 0) {
@@ -30,12 +33,10 @@ class MonthlyInstallmentEvaluationRule implements LoanRequestEvaluationRule {
     private BigDecimal calculateSingleInstallmentAmount(LoanRequestDto loanRequestDto) {
         var loanAmount = loanRequestDto.getLoanAmount();
         var totalNumberOfInstallments = loanRequestDto.getNumberOfInstallments();
-        var numberOfInstallmentsInYear = BigDecimal.valueOf(12);
-        var annualLoanTaxRate = BigDecimal.valueOf(0.04);
 
         var sum = BigDecimal.ZERO.setScale(BIG_DECIMAL_SCALE, RoundingMode.HALF_UP);
         for (int i = 1; i <= totalNumberOfInstallments; i++) {
-            var percentageDividedByNumberOfInstallmentsInYear = annualLoanTaxRate.divide(numberOfInstallmentsInYear, BIG_DECIMAL_SCALE, RoundingMode.HALF_UP);
+            var percentageDividedByNumberOfInstallmentsInYear = ANNUAL_LOAN_TAX_RATE.divide(NUMBER_OF_INSTALLMENTS_IN_YEAR, BIG_DECIMAL_SCALE, RoundingMode.HALF_UP);
             var onePlusPercentageDividedByNumberOfInstallmentsInYearToThePower = BigDecimal.ONE.setScale(BIG_DECIMAL_SCALE, RoundingMode.HALF_UP)
                     .add(percentageDividedByNumberOfInstallmentsInYear)
                     .pow(i);

@@ -9,10 +9,6 @@ class LoanRequestTax {
     private String id;
     private double value;
 
-    LoanRequestTax() {
-        //for JPA
-    }
-
     double getValue() {
         return value;
     }
