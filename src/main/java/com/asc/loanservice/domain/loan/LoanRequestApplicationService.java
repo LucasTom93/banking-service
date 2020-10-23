@@ -2,7 +2,6 @@ package com.asc.loanservice.domain.loan;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -20,42 +19,35 @@ import com.asc.loanservice.domain.validation.LoanValidationFacade;
 public class LoanRequestApplicationService {
     private final LoanValidationFacade loanValidationFacade;
     private final LoanRequestCommandRepository loanRequestCommandRepository;
-    private final LoanRequestTaxRepository loanRequestTaxRepository;
     private final Clock clock;
     private final LoanRequestEvaluationFacade loanRequestEvaluationFacade;
 
     public LoanRequestApplicationService(LoanValidationFacade loanValidationFacade,
-                                         LoanRequestCommandRepository loanRequestCommandRepository, LoanRequestTaxRepository loanRequestTaxRepository,
+                                         LoanRequestCommandRepository loanRequestCommandRepository,
                                          Clock clock,
                                          LoanRequestEvaluationFacade loanRequestEvaluationFacade) {
         this.loanValidationFacade = loanValidationFacade;
         this.loanRequestCommandRepository = loanRequestCommandRepository;
-        this.loanRequestTaxRepository = loanRequestTaxRepository;
         this.clock = clock;
         this.loanRequestEvaluationFacade = loanRequestEvaluationFacade;
     }
 
     public LoanApplicationServiceResult registerLoanRequest(LoanRequestDto loanRequestDto) {
-        List<LoanRequestValidationResult> loanRequestValidationResults = loanValidationFacade.validateLoanRequest(loanRequestDto);
-        Optional<LoanRequestTax> loanRequestTaxOpt = loanRequestTaxRepository.findById(loanRequestDto.getCustomerTaxId());
-
-        boolean isRequestDtoValid = checkRequestDtoIsValid(loanRequestValidationResults);
-
+        var loanRequestValidationResults = loanValidationFacade.validateLoanRequest(loanRequestDto);
+        var isRequestDtoValid = checkRequestDtoIsValid(loanRequestValidationResults);
         if (!isRequestDtoValid) {
             var validationMessages = getValidationMessages(loanRequestValidationResults);
             return LoanApplicationServiceResult.of(false, validationMessages);
         }
 
-        var loanRequestTax = loanRequestTaxOpt.map(LoanRequestTax::getValue).orElseGet(LoanRequestTaxFactory::getDefaultTaxValue);
-        var loanRequest = LoanRequestFactory.createLoanRequest(loanRequestDto, loanRequestTax, clock.getCurrentDate());
         var loanRequestEvaluationDetailsSet = loanRequestEvaluationFacade.evaluate(loanRequestDto);
         var areAllEvaluationRulesApproved = checkAllEvaluationRulesAreApproved(loanRequestEvaluationDetailsSet);
+        var loanRequestEvaluationResult = areAllEvaluationRulesApproved ? LoanRequestEvaluationResult.APPROVED : LoanRequestEvaluationResult.REJECTED;
+        var loanRequest = LoanRequestFactory.createLoanRequest(loanRequestDto, loanRequestEvaluationResult, clock.getCurrentDate());
 
         loanRequestCommandRepository.save(loanRequest);
 
-        var loanRequestEvaluationResult = areAllEvaluationRulesApproved ? LoanRequestEvaluationResult.APPROVED : LoanRequestEvaluationResult.REJECTED;
         var loanRequestRegistrationResultDto = LoanRequestRegistrationResultDto.of(loanRequest.getLoanRequestNumber(), loanRequestEvaluationResult);
-
         return LoanApplicationServiceResult.of(true, Collections.emptyList(), loanRequestRegistrationResultDto);
     }
 

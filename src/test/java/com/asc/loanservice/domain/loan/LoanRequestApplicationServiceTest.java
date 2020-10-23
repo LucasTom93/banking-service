@@ -2,7 +2,6 @@ package com.asc.loanservice.domain.loan;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
@@ -10,7 +9,6 @@ import static org.mockito.Mockito.when;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -35,8 +33,6 @@ class LoanRequestApplicationServiceTest {
     @Mock
     private LoanValidationFacade loanValidationFacade;
     @Mock
-    private LoanRequestTaxRepository loanRequestTaxRepository;
-    @Mock
     private Clock clock;
     @Mock
     private LoanRequestEvaluationFacade loanRequestEvaluationFacade;
@@ -49,10 +45,8 @@ class LoanRequestApplicationServiceTest {
         var customerTaxId = UUID.randomUUID().toString();
         var loanRequestDto = createCorrectLoanRequestDto(customerTaxId);
         var loanRequestValidationResults = List.of(LoanRequestValidationResult.valid());
-        var loanRequestTax = mock(LoanRequestTax.class);
         var evaluationMessage = "Age is correct";
         var loanRequestEvaluationResultDetails = LoanRequestEvaluationResultDetails.of(LoanRequestEvaluationResult.APPROVED, evaluationMessage);
-        when(loanRequestTaxRepository.findById(customerTaxId)).thenReturn(Optional.of(loanRequestTax));
         when(loanValidationFacade.validateLoanRequest(loanRequestDto)).thenReturn(loanRequestValidationResults);
         when(clock.getCurrentDate()).thenReturn(LocalDate.now());
         when(loanRequestEvaluationFacade.evaluate(loanRequestDto)).thenReturn(Set.of(loanRequestEvaluationResultDetails));
@@ -76,7 +70,6 @@ class LoanRequestApplicationServiceTest {
         var loanRequestDto = createIncorrectLoanRequestDto(customerTaxId);
         var validationMessage = "Data not valid";
         var loanRequestValidationResults = List.of(LoanRequestValidationResult.invalid(validationMessage));
-        when(loanRequestTaxRepository.findById(customerTaxId)).thenReturn(Optional.empty());
         when(loanValidationFacade.validateLoanRequest(loanRequestDto)).thenReturn(loanRequestValidationResults);
 
         //when

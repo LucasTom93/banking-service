@@ -6,7 +6,11 @@ import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
+
+import com.asc.loanservice.contracts.LoanRequestEvaluationResult;
 
 @Entity
 class LoanRequest {
@@ -23,42 +27,9 @@ class LoanRequest {
     private LocalDate firstInstallmentDate;
     @Column(name = "REGISTRATION_DATE", nullable = false)
     private LocalDate registrationDate;
-
-    LoanRequest() {
-        //for JPA
-    }
-
-    private LoanRequest(String loanRequestNumber, double loanRequestTax, BigDecimal loanAmount, int numberOfInstallments, LocalDate firstInstallmentDate, LocalDate registrationDate) {
-        this.loanRequestNumber = loanRequestNumber;
-        this.loanRequestTax = loanRequestTax;
-        this.loanAmount = loanAmount;
-        this.numberOfInstallments = numberOfInstallments;
-        this.firstInstallmentDate = firstInstallmentDate;
-    }
-
-    static LoanRequest of(String loanRequestNumber, double loanRequestTax, BigDecimal loanAmount, int numberOfInstallments, LocalDate firstInstallmentDate, LocalDate registrationDate) {
-        return new LoanRequest(loanRequestNumber, loanRequestTax, loanAmount, numberOfInstallments, firstInstallmentDate, registrationDate);
-    }
-
-    public String getLoanRequestNumber() {
-        return loanRequestNumber;
-    }
-
-    public double getLoanRequestTax() {
-        return loanRequestTax;
-    }
-
-    public BigDecimal getLoanAmount() {
-        return loanAmount;
-    }
-
-    public int getNumberOfInstallments() {
-        return numberOfInstallments;
-    }
-
-    public LocalDate getFirstInstallmentDate() {
-        return firstInstallmentDate;
-    }
+    @Enumerated(EnumType.STRING)
+    @Column(name = "EVALUATION_RESULT", nullable = false)
+    private LoanRequestEvaluationResult loanRequestEvaluationResult;
 
     @Override
     public boolean equals(Object o) {
@@ -71,5 +42,73 @@ class LoanRequest {
     @Override
     public int hashCode() {
         return Objects.hash(loanRequestNumber);
+    }
+
+    String getLoanRequestNumber() {
+        return loanRequestNumber;
+    }
+
+    static final class Builder {
+        private String loanRequestNumber;
+        private Double loanRequestTax;
+        private BigDecimal loanAmount;
+        private int numberOfInstallments;
+        private LocalDate firstInstallmentDate;
+        private LocalDate registrationDate;
+        private LoanRequestEvaluationResult loanRequestEvaluationResult;
+
+        private Builder() {
+        }
+
+        static Builder loanRequest() {
+            return new Builder();
+        }
+
+        Builder withLoanRequestNumber(String loanRequestNumber) {
+            this.loanRequestNumber = loanRequestNumber;
+            return this;
+        }
+
+        Builder withLoanRequestTax(Double loanRequestTax) {
+            this.loanRequestTax = loanRequestTax;
+            return this;
+        }
+
+        Builder withLoanAmount(BigDecimal loanAmount) {
+            this.loanAmount = loanAmount;
+            return this;
+        }
+
+        Builder withNumberOfInstallments(int numberOfInstallments) {
+            this.numberOfInstallments = numberOfInstallments;
+            return this;
+        }
+
+        Builder withFirstInstallmentDate(LocalDate firstInstallmentDate) {
+            this.firstInstallmentDate = firstInstallmentDate;
+            return this;
+        }
+
+        Builder withRegistrationDate(LocalDate registrationDate) {
+            this.registrationDate = registrationDate;
+            return this;
+        }
+
+        Builder withLoanRequestEvaluationResult(LoanRequestEvaluationResult loanRequestEvaluationResult) {
+            this.loanRequestEvaluationResult = loanRequestEvaluationResult;
+            return this;
+        }
+
+        LoanRequest build() {
+            LoanRequest loanRequest = new LoanRequest();
+            loanRequest.firstInstallmentDate = this.firstInstallmentDate;
+            loanRequest.registrationDate = this.registrationDate;
+            loanRequest.loanAmount = this.loanAmount;
+            loanRequest.loanRequestTax = this.loanRequestTax;
+            loanRequest.numberOfInstallments = this.numberOfInstallments;
+            loanRequest.loanRequestEvaluationResult = this.loanRequestEvaluationResult;
+            loanRequest.loanRequestNumber = this.loanRequestNumber;
+            return loanRequest;
+        }
     }
 }
