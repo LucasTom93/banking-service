@@ -1,7 +1,8 @@
 package com.asc.loanservice.domain.loan;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.Optional;
 
 import org.springframework.jdbc.core.ColumnMapRowMapper;
@@ -20,18 +21,18 @@ class LoanRequestQueryJDBCRepository implements LoanRequestQueryRepository {
     @Override
     public Optional<LoanRequestDataDto> findByLoanNumber(String loanRequestNumber) {
         String sql = "SELECT " +
-                "LR.REQUEST_NUMBER," +
-                "LR.LOAN_AMOUNT," +
-                "LR.NUMBER_OF_INSTALLMENTS," +
-                "LR.REGISTRATION_DATE," +
-                "LR.FIRST_INSTALLMENT_DATE," +
-                "LR.EVALUATION_RESULT," +
-                "C.NAME," +
-                "C.TAX_ID," +
-                "C.MONTHLY_INCOME " +
-                "FROM LOAN_REQUEST LR " +
-                "JOIN CUSTOMER C ON LR.CUSTOMER_ID = C.CUSTOMER_ID " +
-                "WHERE LR.REQUEST_NUMBER = ?";
+                "LOAN_REQUEST_NUMBER," +
+                "LOAN_AMOUNT," +
+                "LOAN_NUMBER_OF_INSTALLMENTS," +
+                "LOAN_REGISTRATION_DATE," +
+                "LOAN_FIRST_INSTALLMENT_DATE," +
+                "LOAN_EVALUATION_RESULT," +
+                "CUSTOMER_NAME," +
+                "CUSTOMER_DATE_OF_BIRTH," +
+                "CUSTOMER_TAX_ID," +
+                "CUSTOMER_MONTHLY_INCOME " +
+                "FROM LOAN_REQUEST " +
+                "WHERE LOAN_REQUEST_NUMBER = ?";
         var rowResultList = jdbcOperations.query(sql, new Object[]{loanRequestNumber}, new ColumnMapRowMapper());
         if (rowResultList.isEmpty()) {
             return Optional.empty();
@@ -39,14 +40,16 @@ class LoanRequestQueryJDBCRepository implements LoanRequestQueryRepository {
         var columnDataMap = rowResultList.get(0);
         return Optional.of(LoanRequestDataDto.Builder
                 .loanRequestDataDto()
-                .withLoanRequestNumber((String) columnDataMap.get("LR.REQUEST_NUMBER"))
-                .withLoanAmount(new BigDecimal((String) columnDataMap.get("LR.LOAN_AMOUNT")))
-                .withNumberOfInstallments((int) columnDataMap.get("LR.NUMBER_OF_INSTALLMENTS"))
-                .withFirstInstallmentDate(LocalDate.parse((String) columnDataMap.get("LR.FIRST_INSTALLMENT_DATE")))
-                .withEvaluationResult(LoanRequestEvaluationResult.fromString((String) columnDataMap.get("LR.EVALUATION_RESULT")))
-                .withCustomerName((String) columnDataMap.get("C.NAME"))
-                .withCustomerTaxId((String) columnDataMap.get("C.TAX_ID"))
-                .withCustomerMonthlyIncome(new BigDecimal((String) columnDataMap.get("C.MONTHLY_INCOME")))
+                .withLoanRequestNumber((String) columnDataMap.get("LOAN_REQUEST_NUMBER"))
+                .withLoanAmount((BigDecimal) columnDataMap.get("LOAN_AMOUNT"))
+                .withNumberOfInstallments((int) columnDataMap.get("LOAN_NUMBER_OF_INSTALLMENTS"))
+                .withFirstInstallmentDate(((Date) columnDataMap.get("LOAN_FIRST_INSTALLMENT_DATE")).toLocalDate())
+                .withRegistrationDate(((Timestamp) columnDataMap.get("LOAN_REGISTRATION_DATE")).toLocalDateTime())
+                .withEvaluationResult(LoanRequestEvaluationResult.fromString((String) columnDataMap.get("LOAN_EVALUATION_RESULT")))
+                .withCustomerName((String) columnDataMap.get("CUSTOMER_NAME"))
+                .withCustomerTaxId((String) columnDataMap.get("CUSTOMER_TAX_ID"))
+                .withCustomerMonthlyIncome((BigDecimal) columnDataMap.get("CUSTOMER_MONTHLY_INCOME"))
+                .withCustomerBirthday(((Date) columnDataMap.get("CUSTOMER_DATE_OF_BIRTH")).toLocalDate())
                 .build()
         );
     }

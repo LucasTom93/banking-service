@@ -18,6 +18,7 @@ class LoanRequestFactory {
                 .withCustomerName(loanRequestDto.getCustomerName())
                 .withCustomerDateOfBirth(loanRequestDto.getCustomerBirthday())
                 .withCustomerMonthlyIncome(loanRequestDto.getCustomerMonthlyIncome())
+                .withCustomerTaxId(loanRequestDto.getCustomerTaxId())
                 .build();
     }
 }

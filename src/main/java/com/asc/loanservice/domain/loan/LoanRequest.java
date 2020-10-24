@@ -37,6 +37,8 @@ class LoanRequest {
     private LocalDate customerDateOfBirth;
     @Column(name = "CUSTOMER_MONTHLY_INCOME", nullable = false)
     private BigDecimal customerMonthlyIncome;
+    @Column(name = "CUSTOMER_TAX_ID", nullable = false)
+    private String customerTaxId;
 
     String getLoanRequestNumber() {
         return loanRequestNumber;
@@ -65,6 +67,7 @@ class LoanRequest {
         private String customerName;
         private LocalDate customerDateOfBirth;
         private BigDecimal customerMonthlyIncome;
+        private String customerTaxId;
 
         private Builder() {
         }
@@ -118,6 +121,11 @@ class LoanRequest {
             return this;
         }
 
+        Builder withCustomerTaxId(String customerTaxId) {
+            this.customerTaxId = customerTaxId;
+            return this;
+        }
+
         LoanRequest build() {
             LoanRequest loanRequest = new LoanRequest();
             loanRequest.loanAmount = this.loanAmount;
@@ -129,6 +137,7 @@ class LoanRequest {
             loanRequest.customerMonthlyIncome = this.customerMonthlyIncome;
             loanRequest.numberOfInstallments = this.numberOfInstallments;
             loanRequest.customerName = this.customerName;
+            loanRequest.customerTaxId = this.customerTaxId;
             return loanRequest;
         }
     }
