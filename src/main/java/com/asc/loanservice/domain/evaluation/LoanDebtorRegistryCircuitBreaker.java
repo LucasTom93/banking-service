@@ -10,21 +10,18 @@ import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
 
 @Component
 class LoanDebtorRegistryCircuitBreaker {
-    private final DebtorRegistryClient debtorRegistryClient;
-    private final CircuitBreakerConfig circuitBreakerConfig;
-    private final CircuitBreakerRegistry circuitBreakerRegistry;
+    private final DebtorRegistryFeignClient debtorRegistryFeignClient;
     private final CircuitBreaker circuitBreaker;
 
-    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
-    LoanDebtorRegistryCircuitBreaker(DebtorRegistryClient debtorRegistryClient) {
-        this.debtorRegistryClient = debtorRegistryClient;
-        this.circuitBreakerConfig = CircuitBreakerConfig.ofDefaults();
-        this.circuitBreakerRegistry = CircuitBreakerRegistry.of(circuitBreakerConfig);
+    LoanDebtorRegistryCircuitBreaker(DebtorRegistryFeignClient debtorRegistryFeignClient) {
+        this.debtorRegistryFeignClient = debtorRegistryFeignClient;
+        var circuitBreakerConfig = CircuitBreakerConfig.ofDefaults();
+        var circuitBreakerRegistry = CircuitBreakerRegistry.of(circuitBreakerConfig);
         this.circuitBreaker = circuitBreakerRegistry.circuitBreaker("DebtorRegistryClientCB");
     }
 
     CustomerCheckResultDto checkCustomerDebtorRegistry(String customerTaxId) throws Exception {
-        Callable<CustomerCheckResultDto> checkDebtorCallable = () -> debtorRegistryClient.check(customerTaxId);
+        Callable<CustomerCheckResultDto> checkDebtorCallable = () -> debtorRegistryFeignClient.check(customerTaxId);
         return circuitBreaker.executeCallable(checkDebtorCallable);
     }
 }

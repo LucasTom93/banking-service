@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @FeignClient(name = "debtor-registry", url = "http://localhost:8090")
-interface DebtorRegistryClient {
+interface DebtorRegistryFeignClient {
 
     @GetMapping("/api/customercheck/{customerTaxId}")
     CustomerCheckResultDto check(@PathVariable String customerTaxId);
