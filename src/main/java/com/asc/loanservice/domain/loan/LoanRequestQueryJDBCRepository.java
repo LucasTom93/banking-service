@@ -30,9 +30,9 @@ class LoanRequestQueryJDBCRepository implements LoanRequestQueryRepository {
                 "C.TAX_ID," +
                 "C.MONTHLY_INCOME " +
                 "FROM LOAN_REQUEST LR " +
-                "JOIN CUSTOMER C ON LR.CUSTOMER_ID = C.CUSTOMER_ID" +
-                "WHERE LR.REQUEST_NUMBER = :loanNumber";
-        var rowResultList = jdbcOperations.query(sql, new Object[]{}, new ColumnMapRowMapper());
+                "JOIN CUSTOMER C ON LR.CUSTOMER_ID = C.CUSTOMER_ID " +
+                "WHERE LR.REQUEST_NUMBER = ?";
+        var rowResultList = jdbcOperations.query(sql, new Object[]{loanRequestNumber}, new ColumnMapRowMapper());
         if (rowResultList.isEmpty()) {
             return Optional.empty();
         }
