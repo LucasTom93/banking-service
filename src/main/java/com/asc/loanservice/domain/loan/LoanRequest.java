@@ -10,25 +10,37 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 import com.asc.loanservice.contracts.LoanRequestEvaluationResult;
 
 @Entity
+@Table(name = "LOAN_REQUEST")
 class LoanRequest {
     @Id
-    @Column(name = "LOAN_RESUEST_NUMBER")
+    @Column(name = "LOAN_REQUEST_NUMBER")
     private String loanRequestNumber;
     @Column(name = "LOAN_AMOUNT", nullable = false)
     private BigDecimal loanAmount;
-    @Column(name = "NUMBER_OF_INSTALLMENTS", nullable = false)
+    @Column(name = "LOAN_NUMBER_OF_INSTALLMENTS", nullable = false)
     private int numberOfInstallments;
-    @Column(name = "FIRST_INSTALLMENT_DATE", nullable = false)
+    @Column(name = "LOAN_FIRST_INSTALLMENT_DATE", nullable = false)
     private LocalDate firstInstallmentDate;
-    @Column(name = "REGISTRATION_DATE", nullable = false)
+    @Column(name = "LOAN_REGISTRATION_DATE", nullable = false)
     private LocalDateTime registrationDate;
     @Enumerated(EnumType.STRING)
-    @Column(name = "EVALUATION_RESULT", nullable = false)
+    @Column(name = "LOAN_EVALUATION_RESULT", nullable = false)
     private LoanRequestEvaluationResult loanRequestEvaluationResult;
+    @Column(name = "CUSTOMER_NAME", nullable = false)
+    private String customerName;
+    @Column(name = "CUSTOMER_DATE_OF_BIRTH", nullable = false)
+    private LocalDate customerDateOfBirth;
+    @Column(name = "CUSTOMER_MONTHLY_INCOME", nullable = false)
+    private BigDecimal customerMonthlyIncome;
+
+    String getLoanRequestNumber() {
+        return loanRequestNumber;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -43,10 +55,6 @@ class LoanRequest {
         return Objects.hash(loanRequestNumber);
     }
 
-    String getLoanRequestNumber() {
-        return loanRequestNumber;
-    }
-
     static final class Builder {
         private String loanRequestNumber;
         private BigDecimal loanAmount;
@@ -54,6 +62,9 @@ class LoanRequest {
         private LocalDate firstInstallmentDate;
         private LocalDateTime registrationDate;
         private LoanRequestEvaluationResult loanRequestEvaluationResult;
+        private String customerName;
+        private LocalDate customerDateOfBirth;
+        private BigDecimal customerMonthlyIncome;
 
         private Builder() {
         }
@@ -92,14 +103,32 @@ class LoanRequest {
             return this;
         }
 
+        Builder withCustomerName(String customerName) {
+            this.customerName = customerName;
+            return this;
+        }
+
+        Builder withCustomerDateOfBirth(LocalDate customerDateOfBirth) {
+            this.customerDateOfBirth = customerDateOfBirth;
+            return this;
+        }
+
+        Builder withCustomerMonthlyIncome(BigDecimal customerMonthlyIncome) {
+            this.customerMonthlyIncome = customerMonthlyIncome;
+            return this;
+        }
+
         LoanRequest build() {
             LoanRequest loanRequest = new LoanRequest();
-            loanRequest.firstInstallmentDate = this.firstInstallmentDate;
-            loanRequest.registrationDate = this.registrationDate;
             loanRequest.loanAmount = this.loanAmount;
-            loanRequest.numberOfInstallments = this.numberOfInstallments;
-            loanRequest.loanRequestEvaluationResult = this.loanRequestEvaluationResult;
+            loanRequest.registrationDate = this.registrationDate;
+            loanRequest.firstInstallmentDate = this.firstInstallmentDate;
             loanRequest.loanRequestNumber = this.loanRequestNumber;
+            loanRequest.loanRequestEvaluationResult = this.loanRequestEvaluationResult;
+            loanRequest.customerDateOfBirth = this.customerDateOfBirth;
+            loanRequest.customerMonthlyIncome = this.customerMonthlyIncome;
+            loanRequest.numberOfInstallments = this.numberOfInstallments;
+            loanRequest.customerName = this.customerName;
             return loanRequest;
         }
     }

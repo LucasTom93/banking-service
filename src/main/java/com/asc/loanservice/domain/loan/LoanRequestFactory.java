@@ -15,6 +15,9 @@ class LoanRequestFactory {
                 .withNumberOfInstallments(loanRequestDto.getNumberOfInstallments())
                 .withRegistrationDate(registrationDate)
                 .withLoanRequestEvaluationResult(loanRequestEvaluationResult)
+                .withCustomerName(loanRequestDto.getCustomerName())
+                .withCustomerDateOfBirth(loanRequestDto.getCustomerBirthday())
+                .withCustomerMonthlyIncome(loanRequestDto.getCustomerMonthlyIncome())
                 .build();
     }
 }
