@@ -1,73 +1,62 @@
-package com.asc.loanservice.api;
+package com.asc.loanservice;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.Collections;
-import java.util.Optional;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
+import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import com.asc.loanservice.contracts.LoanRequestDataDto;
+import com.asc.loanservice.api.LoanRequestController;
 import com.asc.loanservice.contracts.LoanRequestDto;
-import com.asc.loanservice.contracts.LoanRequestEvaluationResult;
-import com.asc.loanservice.contracts.LoanRequestRegistrationResultDto;
-import com.asc.loanservice.domain.loan.LoanApplicationServiceResult;
-import com.asc.loanservice.domain.loan.LoanRequestApplicationService;
-import com.asc.loanservice.domain.loan.LoanRequestQueryRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-@ExtendWith(MockitoExtension.class)
-class LoanRequestControllerTest {
-    @Mock
-    private LoanRequestApplicationService loanRequestApplicationService;
-    @Mock
-    private LoanRequestQueryRepository loanRequestQueryRepository;
-    @InjectMocks
+@SpringBootTest(classes = LoanServiceApplication.class)
+class LoanServiceE2ETest {
+
+    @Autowired
     private LoanRequestController loanRequestController;
-    private ObjectMapper objectMapper = new ObjectMapper();
+
+    @Autowired
+    private JdbcOperations jdbcOperations;
 
     @Test
     void shouldRegisterLoanRequest() throws Exception {
-        //given
+        var objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
         var mockMvc = MockMvcBuilders.standaloneSetup(loanRequestController).build();
-        var loanRequestNumber = UUID.randomUUID().toString();
         var loanRequestDto = objectMapper.readValue(getValidLoanRequestJson(), LoanRequestDto.class);
         var requestBodyJson = objectMapper.writeValueAsString(loanRequestDto);
-        var loanApplicationServiceResult = createLoanApplicationServiceResult(loanRequestNumber);
-        when(loanRequestApplicationService.registerLoanRequest(loanRequestDto)).thenReturn(loanApplicationServiceResult);
 
         //when //then
         mockMvc.perform(post("/api/loans")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBodyJson))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("loanRequestNumber").value(loanRequestNumber))
-                .andExpect(jsonPath("evaluationResult").value("APPROVED"));
+                .andExpect(jsonPath("loanRequestNumber").isNotEmpty())
+                .andExpect(jsonPath("evaluationResult").value("REJECTED"));
     }
 
     @Test
-    void shouldReturnBadRequestWHenInputInvalid() throws Exception {
+    void shouldReturnBadRequestWhenInputInvalid() throws Exception {
         //given
+        var objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
         var mockMvc = MockMvcBuilders.standaloneSetup(loanRequestController).build();
-        var loanRequestRegistrationResultDto = mock(LoanRequestRegistrationResultDto.class);
         var loanRequestDto = objectMapper.readValue(getInvalidLoanRequestJson(), LoanRequestDto.class);
-        var loanApplicationServiceResult = LoanApplicationServiceResult.of(false, Collections.emptyList(), loanRequestRegistrationResultDto);
         var requestBodyJson = objectMapper.writeValueAsString(loanRequestDto);
-        when(loanRequestApplicationService.registerLoanRequest(loanRequestDto)).thenReturn(loanApplicationServiceResult);
 
         //when //then
         mockMvc.perform(post("/api/loans")
@@ -77,23 +66,28 @@ class LoanRequestControllerTest {
     }
 
     @Test
-    void shouldReturnLOanRequestData() throws Exception {
+    void shouldNotFindLoanRequestDataWhenDoesntExist() throws Exception {
         //given
         var mockMvc = MockMvcBuilders.standaloneSetup(loanRequestController).build();
-        var loanRequestDataDto = createRequestLoanDataDto();
         var loanRequestNumber = UUID.randomUUID().toString();
-        when(loanRequestQueryRepository.findByLoanNumber(loanRequestNumber)).thenReturn(Optional.of(loanRequestDataDto));
 
         //when //then
         mockMvc.perform(get("/api/loans/{loanNumber}", loanRequestNumber)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 
-    private LoanRequestDataDto createRequestLoanDataDto() {
-        return LoanRequestDataDto.Builder
-                .loanRequestDataDto()
-                .build();
+    @Test
+    void shouldReturnLoanRequestDataWhenExists() throws Exception {
+        //given
+        insertTestData();
+        var mockMvc = MockMvcBuilders.standaloneSetup(loanRequestController).build();
+        var loanRequestNumber = "cb6d9544-36ca-4542-b146-e5cb7ba04abb";
+
+        //when //then
+        mockMvc.perform(get("/api/loans/{loanNumber}", loanRequestNumber)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 
     private String getValidLoanRequestJson() {
@@ -115,13 +109,9 @@ class LoanRequestControllerTest {
                 "}";
     }
 
-    private LoanApplicationServiceResult createLoanApplicationServiceResult(String loanRequestNumber) {
-        return LoanApplicationServiceResult.of(
-                true,
-                Collections.emptyList(),
-                LoanRequestRegistrationResultDto.of(
-                        loanRequestNumber,
-                        LoanRequestEvaluationResult.APPROVED)
-        );
+    private void insertTestData() throws IOException {
+        var classPathResource = new ClassPathResource("db/insertLoanRequestData.sql");
+        var initDataSql = new String(Files.readAllBytes(Paths.get(classPathResource.getURI())));
+        jdbcOperations.execute(initDataSql);
     }
 }
