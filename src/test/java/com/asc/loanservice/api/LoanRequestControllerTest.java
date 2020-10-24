@@ -4,12 +4,13 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.Collections;
 import java.util.Optional;
+import java.util.UUID;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,11 +21,13 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.asc.loanservice.contracts.LoanRequestDataDto;
 import com.asc.loanservice.contracts.LoanRequestDto;
+import com.asc.loanservice.contracts.LoanRequestEvaluationResult;
 import com.asc.loanservice.contracts.LoanRequestRegistrationResultDto;
 import com.asc.loanservice.domain.loan.LoanApplicationServiceResult;
 import com.asc.loanservice.domain.loan.LoanRequestApplicationService;
 import com.asc.loanservice.domain.loan.LoanRequestQueryRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 @ExtendWith(MockitoExtension.class)
 class LoanRequestControllerTest {
@@ -37,22 +40,23 @@ class LoanRequestControllerTest {
     private ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
-    //??? Problems with mapping LocalDte by object mapper - manual tests passed ???
-    @Disabled
     void shouldRegisterLoanRequest() throws Exception {
         //given
+        objectMapper.registerModule(new JavaTimeModule());
         var mockMvc = MockMvcBuilders.standaloneSetup(loanRequestController).build();
-        var loanRequestRegistrationResultDto = mock(LoanRequestRegistrationResultDto.class);
+        var loanRequestNumber = UUID.randomUUID().toString();
         var loanRequestDto = objectMapper.readValue(getValidLoanRequestJson(), LoanRequestDto.class);
-        var loanApplicationServiceResult = LoanApplicationServiceResult.of(true, Collections.emptyList(), loanRequestRegistrationResultDto);
         var requestBodyJson = objectMapper.writeValueAsString(loanRequestDto);
+        var loanApplicationServiceResult = createLoanApplicationServiceResult(loanRequestNumber);
         when(loanRequestApplicationService.registerLoanRequest(loanRequestDto)).thenReturn(loanApplicationServiceResult);
 
         //when //then
         mockMvc.perform(post("/api/loans")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBodyJson))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("loanRequestNumber").value(loanRequestNumber))
+                .andExpect(jsonPath("evaluationResult").value("APPROVED"));
     }
 
     @Test
@@ -73,19 +77,23 @@ class LoanRequestControllerTest {
     }
 
     @Test
-    //??No serializer???
-    @Disabled
     void shouldReturnLOanRequestData() throws Exception {
         //given
         var mockMvc = MockMvcBuilders.standaloneSetup(loanRequestController).build();
-        var loanRequestDataDto = mock(LoanRequestDataDto.class);
-        var loanRequestNumber = "123";
+        var loanRequestDataDto = createRequestLoanDataDto();
+        var loanRequestNumber = UUID.randomUUID().toString();
         when(loanRequestQueryRepository.findByLoanNumber(loanRequestNumber)).thenReturn(Optional.of(loanRequestDataDto));
 
         //when //then
         mockMvc.perform(get("/api/loans/{loanNumber}", loanRequestNumber)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
+    }
+
+    private LoanRequestDataDto createRequestLoanDataDto() {
+        return LoanRequestDataDto.Builder
+                .loanRequestDataDto()
+                .build();
     }
 
     private String getValidLoanRequestJson() {
@@ -105,5 +113,15 @@ class LoanRequestControllerTest {
                 "  \"customerMonthlyIncome\": 10000,\n" +
                 "  \"numberOfInstallments\": 30\n" +
                 "}";
+    }
+
+    private LoanApplicationServiceResult createLoanApplicationServiceResult(String loanRequestNumber) {
+        return LoanApplicationServiceResult.of(
+                true,
+                Collections.emptyList(),
+                LoanRequestRegistrationResultDto.of(
+                        loanRequestNumber,
+                        LoanRequestEvaluationResult.APPROVED)
+        );
     }
 }
