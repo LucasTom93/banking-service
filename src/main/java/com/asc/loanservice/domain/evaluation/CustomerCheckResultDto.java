@@ -2,14 +2,14 @@ package com.asc.loanservice.domain.evaluation;
 
 public class CustomerCheckResultDto {
     private String customerTaxId;
-    private Boolean isRegisteredDebtor;
+    private Boolean registeredDebtor;
 
     public String getCustomerTaxId() {
         return customerTaxId;
     }
 
     public Boolean getRegisteredDebtor() {
-        return isRegisteredDebtor;
+        return registeredDebtor;
     }
 
     public static final class Builder {
@@ -36,7 +36,7 @@ public class CustomerCheckResultDto {
         public CustomerCheckResultDto build() {
             CustomerCheckResultDto customerCheckResultDto = new CustomerCheckResultDto();
             customerCheckResultDto.customerTaxId = this.customerTaxId;
-            customerCheckResultDto.isRegisteredDebtor = this.isRegisteredDebtor;
+            customerCheckResultDto.registeredDebtor = this.isRegisteredDebtor;
             return customerCheckResultDto;
         }
     }
