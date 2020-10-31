@@ -8,8 +8,4 @@ public interface Clock {
     LocalDate getCurrentDate();
 
     LocalDateTime getCurrentLocalDateTime();
-
-    static Clock getDefault() {
-        return new SimpleClock();
-    }
 }

@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,10 +14,15 @@ import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.asc.loanservice.annotations.DomainAggregateRoot;
+import com.asc.loanservice.contracts.LoanRequestDto;
 import com.asc.loanservice.contracts.LoanRequestEvaluationResult;
+import com.asc.loanservice.domain.evaluation.LoanRequestEvaluationResultDetails;
+import com.asc.loanservice.domain.evaluation.LoanRequestEvaluationRule;
 
 @Entity
 @Table(name = "LOAN_REQUEST")
+@DomainAggregateRoot
 class LoanRequest {
     @Id
     @Column(name = "LOAN_REQUEST_NUMBER")
@@ -44,6 +51,26 @@ class LoanRequest {
         return loanRequestNumber;
     }
 
+    LoanRequestEvaluationResult getLoanRequestEvaluationResult() {
+        return loanRequestEvaluationResult;
+    }
+
+    void evaluate(LoanRequestDto loanRequestDto, Set<LoanRequestEvaluationRule> loanRequestEvaluationRules) {
+        var loanRequestEvaluationDetailsSet = loanRequestEvaluationRules
+                .stream()
+                .map(rule -> rule.evaluate(loanRequestDto))
+                .collect(Collectors.toSet());
+        var areAllEvaluationRulesApproved = checkAllEvaluationRulesAreApproved(loanRequestEvaluationDetailsSet);
+        loanRequestEvaluationResult = areAllEvaluationRulesApproved ? LoanRequestEvaluationResult.APPROVED : LoanRequestEvaluationResult.REJECTED;
+    }
+
+    private boolean checkAllEvaluationRulesAreApproved(Set<LoanRequestEvaluationResultDetails> loanRequestEvaluationDetailsSet) {
+        return loanRequestEvaluationDetailsSet
+                .stream()
+                .map(LoanRequestEvaluationResultDetails::getLoanRequestEvaluationResult)
+                .allMatch(evaluationResult -> evaluationResult.equals(LoanRequestEvaluationResult.APPROVED));
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -63,7 +90,6 @@ class LoanRequest {
         private int numberOfInstallments;
         private LocalDate firstInstallmentDate;
         private LocalDateTime registrationDate;
-        private LoanRequestEvaluationResult loanRequestEvaluationResult;
         private String customerName;
         private LocalDate customerDateOfBirth;
         private BigDecimal customerMonthlyIncome;
@@ -101,11 +127,6 @@ class LoanRequest {
             return this;
         }
 
-        Builder withLoanRequestEvaluationResult(LoanRequestEvaluationResult loanRequestEvaluationResult) {
-            this.loanRequestEvaluationResult = loanRequestEvaluationResult;
-            return this;
-        }
-
         Builder withCustomerName(String customerName) {
             this.customerName = customerName;
             return this;
@@ -132,7 +153,6 @@ class LoanRequest {
             loanRequest.registrationDate = this.registrationDate;
             loanRequest.firstInstallmentDate = this.firstInstallmentDate;
             loanRequest.loanRequestNumber = this.loanRequestNumber;
-            loanRequest.loanRequestEvaluationResult = this.loanRequestEvaluationResult;
             loanRequest.customerDateOfBirth = this.customerDateOfBirth;
             loanRequest.customerMonthlyIncome = this.customerMonthlyIncome;
             loanRequest.numberOfInstallments = this.numberOfInstallments;

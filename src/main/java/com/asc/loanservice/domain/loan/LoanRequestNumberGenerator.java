@@ -2,8 +2,12 @@ package com.asc.loanservice.domain.loan;
 
 import java.util.UUID;
 
+import org.springframework.stereotype.Component;
+
+@Component
 class LoanRequestNumberGenerator {
-    static String generateLoanRequestNumber() {
+
+    String generateLoanRequestNumber() {
         return UUID.randomUUID().toString();
     }
 }

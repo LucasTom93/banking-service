@@ -12,6 +12,7 @@ import com.asc.loanservice.contracts.LoanRequestDataDto;
 import com.asc.loanservice.contracts.LoanRequestDto;
 import com.asc.loanservice.domain.loan.LoanRequestApplicationService;
 import com.asc.loanservice.domain.loan.LoanRequestQueryRepository;
+import com.asc.loanservice.domain.loan.LoanValidationException;
 
 @RestController
 @RequestMapping("/api/loans")
@@ -26,11 +27,12 @@ public class LoanRequestController {
 
     @PostMapping
     public ResponseEntity<?> register(@RequestBody LoanRequestDto loanRequest) {
-        var loanApplicationServiceResult = loanRequestApplicationService.registerLoanRequest(loanRequest);
-        if (!loanApplicationServiceResult.isInputDataValid()) {
-            return ResponseEntity.badRequest().body(loanApplicationServiceResult.getValidationMessages());
+        try {
+            var loanRequestRegistrationResultDto = loanRequestApplicationService.registerLoanRequest(loanRequest);
+            return ResponseEntity.ok().body(loanRequestRegistrationResultDto);
+        } catch (LoanValidationException e) {
+            return ResponseEntity.badRequest().body(e.getValidationMessage());
         }
-        return ResponseEntity.ok().body(loanApplicationServiceResult.getLoanRequestRegistrationResultDto());
     }
 
     @GetMapping("/{loanNumber}")

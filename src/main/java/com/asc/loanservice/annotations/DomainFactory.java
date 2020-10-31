@@ -14,5 +14,5 @@ import org.springframework.stereotype.Component;
 @Documented
 @Inherited
 @Component
-public @interface DataValidator {
+public @interface DomainFactory {
 }

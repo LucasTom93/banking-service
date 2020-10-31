@@ -1,13 +1,11 @@
 package com.asc.loanservice.api;
 
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -23,9 +21,9 @@ import com.asc.loanservice.contracts.LoanRequestDataDto;
 import com.asc.loanservice.contracts.LoanRequestDto;
 import com.asc.loanservice.contracts.LoanRequestEvaluationResult;
 import com.asc.loanservice.contracts.LoanRequestRegistrationResultDto;
-import com.asc.loanservice.domain.loan.LoanApplicationServiceResult;
 import com.asc.loanservice.domain.loan.LoanRequestApplicationService;
 import com.asc.loanservice.domain.loan.LoanRequestQueryRepository;
+import com.asc.loanservice.domain.loan.LoanValidationException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
@@ -47,7 +45,7 @@ class LoanRequestControllerUnitTest {
         var loanRequestNumber = UUID.randomUUID().toString();
         var loanRequestDto = objectMapper.readValue(getValidLoanRequestJson(), LoanRequestDto.class);
         var requestBodyJson = objectMapper.writeValueAsString(loanRequestDto);
-        var loanApplicationServiceResult = createLoanApplicationServiceResult(loanRequestNumber);
+        var loanApplicationServiceResult = createLoanRequestRegistrationResultDto(loanRequestNumber);
         when(loanRequestApplicationService.registerLoanRequest(loanRequestDto)).thenReturn(loanApplicationServiceResult);
 
         //when //then
@@ -63,11 +61,9 @@ class LoanRequestControllerUnitTest {
     void shouldReturnBadRequestWhenInputInvalid() throws Exception {
         //given
         var mockMvc = MockMvcBuilders.standaloneSetup(loanRequestController).build();
-        var loanRequestRegistrationResultDto = mock(LoanRequestRegistrationResultDto.class);
         var loanRequestDto = objectMapper.readValue(getInvalidLoanRequestJson(), LoanRequestDto.class);
-        var loanApplicationServiceResult = LoanApplicationServiceResult.of(false, Collections.emptyList(), loanRequestRegistrationResultDto);
         var requestBodyJson = objectMapper.writeValueAsString(loanRequestDto);
-        when(loanRequestApplicationService.registerLoanRequest(loanRequestDto)).thenReturn(loanApplicationServiceResult);
+        when(loanRequestApplicationService.registerLoanRequest(loanRequestDto)).thenThrow(new LoanValidationException(""));
 
         //when //then
         mockMvc.perform(post("/api/loans")
@@ -128,13 +124,9 @@ class LoanRequestControllerUnitTest {
                 "}";
     }
 
-    private LoanApplicationServiceResult createLoanApplicationServiceResult(String loanRequestNumber) {
-        return LoanApplicationServiceResult.of(
-                true,
-                Collections.emptyList(),
-                LoanRequestRegistrationResultDto.of(
-                        loanRequestNumber,
-                        LoanRequestEvaluationResult.APPROVED)
-        );
+    private LoanRequestRegistrationResultDto createLoanRequestRegistrationResultDto(String loanRequestNumber) {
+        return LoanRequestRegistrationResultDto.of(
+                loanRequestNumber,
+                LoanRequestEvaluationResult.APPROVED);
     }
 }
