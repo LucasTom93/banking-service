@@ -27,7 +27,7 @@ class CustomerDateOfBirth {
         }
 
         if (!value.isBefore(currentDate)) {
-            throw new LoanValidationException(String.format("Customer birthday must be before today. Provided %s", value));
+            throw new LoanValidationException(String.format("Customer birthday must be before today (%s). Provided %s", currentDate, value));
         }
 
         return new CustomerDateOfBirth(value);

@@ -2,55 +2,58 @@ package com.asc.loanservice.domain.loan;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.verifyZeroInteractions;
-import static org.mockito.Mockito.when;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
+import com.asc.loanservice.LoanServiceApplication;
 import com.asc.loanservice.contracts.LoanRequestDto;
+import com.asc.loanservice.contracts.LoanRequestEvaluationResult;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest(classes = LoanServiceApplication.class)
+@ActiveProfiles("TEST")
 class LoanRequestApplicationServiceTest {
-    @Mock
-    private LoanRequestCommandRepository loanRequestCommandRepository;
-    @Mock
-    private LoanRequestFactory loanRequestFactory;
-    @InjectMocks
+
+    @Autowired
     private LoanRequestApplicationService loanRequestApplicationService;
 
     @Test
     void shouldRegisterLoanRequestWhenInputDataIsValid() throws LoanValidationException {
-        //given
-        var loanRequestDto = mock(LoanRequestDto.class);
-        var loanRequest = mock(LoanRequest.class);
-        when(loanRequestFactory.createEvaluatedLoanRequest(loanRequestDto)).thenReturn(loanRequest);
+        var loanRequestDto = createCorrectLoanRequestDto();
 
-        //when
         var loanRequestRegistrationResultDto = loanRequestApplicationService.registerLoanRequest(loanRequestDto);
 
-        //then
-        verifyNoMoreInteractions(loanRequestFactory);
-        verify(loanRequestCommandRepository).save(loanRequest);
-        assertThat(loanRequestRegistrationResultDto).isNotNull();
+        assertThat(loanRequestRegistrationResultDto.getEvaluationResult()).isEqualTo(LoanRequestEvaluationResult.REJECTED);
+        assertThat(loanRequestRegistrationResultDto.getLoanRequestNumber()).isNotEmpty();
     }
 
     @Test
-    void shouldNotRegisterLoanRequestWhenInputDataIsNotValid() throws LoanValidationException {
-        //given
-        var loanRequestDto = mock(LoanRequestDto.class);
-        var validationMessage = "Invalid input data";
-        when(loanRequestFactory.createEvaluatedLoanRequest(loanRequestDto)).thenThrow(new LoanValidationException(validationMessage));
+    void shouldNotRegisterLoanRequestWhenInputDataIsNotValid() {
+        var loanRequestDto = createIncorrectLoanRequestDto();
 
-        //when //then
-        assertThatThrownBy(() -> loanRequestApplicationService.registerLoanRequest(loanRequestDto), validationMessage).isInstanceOf(LoanValidationException.class);
-        verifyZeroInteractions(loanRequestCommandRepository);
-        verifyNoMoreInteractions(loanRequestFactory);
+        assertThatThrownBy(() -> loanRequestApplicationService.registerLoanRequest(loanRequestDto)).isInstanceOf(LoanValidationException.class);
+    }
+
+    private LoanRequestDto createCorrectLoanRequestDto() {
+        return LoanRequestDto.Builder
+                .loanRequestDto()
+                .withCustomerName("John Doe")
+                .withCustomerTaxId(UUID.randomUUID().toString())
+                .withCustomerMonthlyIncome(BigDecimal.valueOf(10000))
+                .withLoanAmount(BigDecimal.valueOf(40000))
+                .withNumberOfInstallments(30)
+                .withFirstInstallmentDate(LocalDate.of(2021, 1, 1))
+                .withCustomerBirthday(LocalDate.of(2000, 12, 31))
+                .build();
+    }
+
+    private LoanRequestDto createIncorrectLoanRequestDto() {
+        return LoanRequestDto.Builder.loanRequestDto().build();
     }
 }

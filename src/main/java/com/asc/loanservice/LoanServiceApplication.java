@@ -6,9 +6,14 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
 @EnableFeignClients
-class LoanServiceApplication {
+public class LoanServiceApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(LoanServiceApplication.class, args);
+	}
+
+	public interface Profile {
+		String TEST = "TEST";
+		String PRODUCTION = "PRODUCTION";
 	}
 }

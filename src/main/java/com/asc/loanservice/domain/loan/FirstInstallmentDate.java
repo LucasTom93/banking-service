@@ -27,7 +27,7 @@ class FirstInstallmentDate {
         }
 
         if (!value.isAfter(currentDate)) {
-            throw new LoanValidationException(String.format("First installment date must be before today. Provided %s", currentDate));
+            throw new LoanValidationException(String.format("First installment date must be after today (%s). Provided %s", currentDate, value));
         }
         return new FirstInstallmentDate(value);
     }
