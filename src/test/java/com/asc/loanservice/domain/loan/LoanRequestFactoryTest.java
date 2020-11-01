@@ -1,6 +1,7 @@
 package com.asc.loanservice.domain.loan;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -10,9 +11,14 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.Callable;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -92,5 +98,27 @@ class LoanRequestFactoryTest {
                 .withCustomerTaxId(UUID.randomUUID().toString())
                 .withLoanAmount(BigDecimal.valueOf(1000))
                 .build();
+    }
+
+    @ParameterizedTest
+    @MethodSource("failingValidationDataSource")
+    void shouldThrowLoanValidationExceptionWhenInputDataInvalid(Callable<?> throwableAction) {
+        assertThatThrownBy(throwableAction::call).isInstanceOf(LoanValidationException.class);
+    }
+
+    private static Stream<Arguments> failingValidationDataSource() {
+        return Stream.of(
+                Arguments.of((Callable<CustomerDateOfBirth>) () -> CustomerDateOfBirth.of(null, null)),
+                Arguments.of((Callable<CustomerMonthlyIncome>) () -> CustomerMonthlyIncome.of(null)),
+                Arguments.of((Callable<CustomerMonthlyIncome>) () -> CustomerMonthlyIncome.of(new BigDecimal(-1))),
+                Arguments.of((Callable<CustomerName>) () -> CustomerName.of(null)),
+                Arguments.of((Callable<CustomerTaxId>) () -> CustomerTaxId.of(null)),
+                Arguments.of((Callable<FirstInstallmentDate>) () -> FirstInstallmentDate.of(null, null)),
+                Arguments.of((Callable<FirstInstallmentDate>) () -> FirstInstallmentDate.of(LocalDate.of(2020, 1, 1), LocalDate.of(2020, 1, 1))),
+                Arguments.of((Callable<LoanAmount>) () -> LoanAmount.of(null)),
+                Arguments.of((Callable<LoanAmount>) () -> LoanAmount.of(new BigDecimal(0))),
+                Arguments.of((Callable<NumberOfInstallments>) () -> NumberOfInstallments.of(null)),
+                Arguments.of((Callable<NumberOfInstallments>) () -> NumberOfInstallments.of(0))
+        );
     }
 }
