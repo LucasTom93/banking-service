@@ -5,7 +5,6 @@ import java.math.RoundingMode;
 
 import org.springframework.stereotype.Component;
 
-import com.asc.loanservice.contracts.LoanRequestDto;
 import com.asc.loanservice.contracts.LoanRequestEvaluationResult;
 
 @Component
@@ -17,22 +16,22 @@ class MonthlyInstallmentEvaluationRule implements LoanRequestEvaluationRule {
     private static final BigDecimal ANNUAL_LOAN_TAX_RATE = BigDecimal.valueOf(0.04);
 
     @Override
-    public LoanRequestEvaluationResultDetails evaluate(LoanRequestDto loanRequestDto) {
-        var monthlyIncomePercentageThreshold = loanRequestDto.getCustomerMonthlyIncome().multiply(PERCENTAGE_RISK_THRESHOLD).setScale(BIG_DECIMAL_SCALE, RoundingMode.HALF_UP);
-        var loanInstallmentAmount = calculateSingleInstallmentAmount(loanRequestDto);
+    public LoanRequestEvaluationResultDetails evaluate(EvaluationData evaluationData) {
+        var monthlyIncomePercentageThreshold = evaluationData.getCustomerMonthlyIncome().multiply(PERCENTAGE_RISK_THRESHOLD).setScale(BIG_DECIMAL_SCALE, RoundingMode.HALF_UP);
+        var loanInstallmentAmount = calculateSingleInstallmentAmount(evaluationData);
 
         if (loanInstallmentAmount.compareTo(monthlyIncomePercentageThreshold) > 0) {
-            return createRejectedResult(loanInstallmentAmount, loanRequestDto.getCustomerMonthlyIncome());
+            return createRejectedResult(loanInstallmentAmount, evaluationData.getCustomerMonthlyIncome());
         }
-        return createApprovedResult(loanInstallmentAmount, loanRequestDto.getCustomerMonthlyIncome());
+        return createApprovedResult(loanInstallmentAmount, evaluationData.getCustomerMonthlyIncome());
     }
 
     /**
      * <a href ="https://finanse.rankomat.pl/poradniki/obliczyc-rate-kredytu-gotowkowego/">Example of loan installment amount calculation (click)</a>
      */
-    private BigDecimal calculateSingleInstallmentAmount(LoanRequestDto loanRequestDto) {
-        var loanAmount = loanRequestDto.getLoanAmount();
-        var totalNumberOfInstallments = loanRequestDto.getNumberOfInstallments();
+    private BigDecimal calculateSingleInstallmentAmount(EvaluationData evaluationData) {
+        var loanAmount = evaluationData.getLoanAmount();
+        var totalNumberOfInstallments = evaluationData.getNumberOfInstallments();
 
         var sum = BigDecimal.ZERO.setScale(BIG_DECIMAL_SCALE, RoundingMode.HALF_UP);
         for (int i = 1; i <= totalNumberOfInstallments; i++) {

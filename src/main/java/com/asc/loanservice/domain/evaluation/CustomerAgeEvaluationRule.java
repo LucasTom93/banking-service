@@ -6,7 +6,6 @@ import java.time.Period;
 
 import org.springframework.stereotype.Component;
 
-import com.asc.loanservice.contracts.LoanRequestDto;
 import com.asc.loanservice.contracts.LoanRequestEvaluationResult;
 
 @Component
@@ -15,20 +14,20 @@ class CustomerAgeEvaluationRule implements LoanRequestEvaluationRule {
     private static final int CUSTOMER_AGE_THRESHOLD = 65;
 
     @Override
-    public LoanRequestEvaluationResultDetails evaluate(LoanRequestDto loanRequestDto) {
-        var ageOfCustomerWhenFinishedInstallments = calculateCustomerAgeAfterAllInstallments(loanRequestDto);
+    public LoanRequestEvaluationResultDetails evaluate(EvaluationData evaluationData) {
+        var ageOfCustomerWhenFinishedInstallments = calculateCustomerAgeAfterAllInstallments(evaluationData);
         if (ageOfCustomerWhenFinishedInstallments > CUSTOMER_AGE_THRESHOLD) {
             return createRejectedResult(ageOfCustomerWhenFinishedInstallments);
         }
         return createApprovedResult(ageOfCustomerWhenFinishedInstallments);
     }
 
-    private int calculateCustomerAgeAfterAllInstallments(LoanRequestDto loanRequestDto) {
-        var loanDurationInMonths = loanRequestDto.getNumberOfInstallments();
-        var firstInstallmentDate = loanRequestDto.getFirstInstallmentDate();
-        var customerBirthday = loanRequestDto.getCustomerBirthday();
+    private int calculateCustomerAgeAfterAllInstallments(EvaluationData evaluationData) {
+        var loanDurationInMonths = evaluationData.getNumberOfInstallments();
+        var firstInstallmentDate = evaluationData.getFirstInstallmentDate();
+        var customerDateOfBirth = evaluationData.getCustomerDateOfBirth();
         var loanEndDate = firstInstallmentDate.plusMonths(loanDurationInMonths);
-        var customerAgeAfterLoanInMonths = Period.between(customerBirthday, loanEndDate).toTotalMonths();
+        var customerAgeAfterLoanInMonths = Period.between(customerDateOfBirth, loanEndDate).toTotalMonths();
         var monthsInYear = BigDecimal.valueOf(12);
 
         return BigDecimal

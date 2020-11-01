@@ -3,12 +3,9 @@ package com.asc.loanservice.domain.evaluation;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.Month;
 
 import org.junit.jupiter.api.Test;
 
-import com.asc.loanservice.contracts.LoanRequestDto;
 import com.asc.loanservice.contracts.LoanRequestEvaluationResult;
 
 class MonthlyInstallmentEvaluationRuleTest {
@@ -22,7 +19,7 @@ class MonthlyInstallmentEvaluationRuleTest {
         var monthlyIncome = BigDecimal.valueOf(10000);
 
         //when
-        var evaluationResultDetails = monthlyInstallmentEvaluationRule.evaluate(createLoanRequestDto(loanAmount, numberOfInstallments, monthlyIncome));
+        var evaluationResultDetails = monthlyInstallmentEvaluationRule.evaluate(createEvaluationData(loanAmount, numberOfInstallments, monthlyIncome));
 
         //then
         assertThat(evaluationResultDetails.getLoanRequestEvaluationResult()).isEqualTo(LoanRequestEvaluationResult.APPROVED);
@@ -37,24 +34,18 @@ class MonthlyInstallmentEvaluationRuleTest {
         var monthlyIncome = BigDecimal.valueOf(5000);
 
         //when
-        var evaluationResultDetails = monthlyInstallmentEvaluationRule.evaluate(createLoanRequestDto(loanAmount, numberOfInstallments, monthlyIncome));
+        var evaluationResultDetails = monthlyInstallmentEvaluationRule.evaluate(createEvaluationData(loanAmount, numberOfInstallments, monthlyIncome));
 
         //then
         assertThat(evaluationResultDetails.getLoanRequestEvaluationResult()).isEqualTo(LoanRequestEvaluationResult.REJECTED);
         assertThat(evaluationResultDetails.getEvaluationMessage()).isNotBlank();
     }
 
-    private LoanRequestDto createLoanRequestDto(BigDecimal loanAmount, int numberOfInstallments, BigDecimal monthlyIncome) {
-        var customerBirthday = LocalDate.of(2000, Month.JANUARY, 1);
-        var firstInstallmentDate = LocalDate.of(2021, Month.JANUARY, 1);
-        return LoanRequestDto.Builder
-                .loanRequestDto()
-                .withCustomerName("John Doe")
-                .withCustomerBirthday(customerBirthday)
+    private EvaluationData createEvaluationData(BigDecimal loanAmount, int numberOfInstallments, BigDecimal monthlyIncome) {
+        return EvaluationData.Builder
+                .evaluationData()
                 .withCustomerMonthlyIncome(monthlyIncome)
-                .withFirstInstallmentDate(firstInstallmentDate)
                 .withNumberOfInstallments(numberOfInstallments)
-                .withCustomerTaxId("1234")
                 .withLoanAmount(loanAmount)
                 .build();
     }

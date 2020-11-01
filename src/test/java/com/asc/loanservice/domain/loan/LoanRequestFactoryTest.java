@@ -1,6 +1,7 @@
 package com.asc.loanservice.domain.loan;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -18,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.asc.loanservice.contracts.LoanRequestDto;
 import com.asc.loanservice.contracts.LoanRequestEvaluationResult;
+import com.asc.loanservice.domain.evaluation.EvaluationData;
 import com.asc.loanservice.domain.evaluation.LoanRequestEvaluationFacade;
 import com.asc.loanservice.domain.evaluation.LoanRequestEvaluationResultDetails;
 import com.asc.loanservice.domain.evaluation.LoanRequestEvaluationRule;
@@ -44,7 +46,7 @@ class LoanRequestFactoryTest {
         var loanRequestDto = createLoanRequestDto();
         var loanRequestEvaluationRule = mock(LoanRequestEvaluationRule.class);
         var loanRequestEvaluationResultDetails = LoanRequestEvaluationResultDetails.of(LoanRequestEvaluationResult.APPROVED, "Passed");
-        when(loanRequestEvaluationRule.evaluate(loanRequestDto)).thenReturn(loanRequestEvaluationResultDetails);
+        when(loanRequestEvaluationRule.evaluate(any(EvaluationData.class))).thenReturn(loanRequestEvaluationResultDetails);
         when(loanRequestNumberGenerator.generateLoanRequestNumber()).thenReturn(loanRequestNumber);
         when(clock.getCurrentDate()).thenReturn(currentDate);
         when(clock.getCurrentLocalDateTime()).thenReturn(currentDateTime);

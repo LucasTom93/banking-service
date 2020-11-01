@@ -32,6 +32,10 @@ class CustomerMonthlyIncome {
         return new CustomerMonthlyIncome(value);
     }
 
+    BigDecimal getValue() {
+        return value;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

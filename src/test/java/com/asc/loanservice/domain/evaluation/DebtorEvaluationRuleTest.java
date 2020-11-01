@@ -11,7 +11,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.asc.loanservice.contracts.LoanRequestDto;
 import com.asc.loanservice.contracts.LoanRequestEvaluationResult;
 
 @ExtendWith(MockitoExtension.class)
@@ -27,7 +26,7 @@ class DebtorEvaluationRuleTest {
     @Test
     void shouldApproveLoanRequestWhenReachedAgeThresholdAcceptable() throws Exception {
         //given
-        var loanRequestDto = createSimpleLoanRequestDto(customerTaxId);
+        var loanRequestDto = createEvaluationData(customerTaxId);
         var customerCheckResultDto = createCustomerCheckResultDto(customerTaxId, false);
         when(loanDebtorRegistryCircuitBreaker.checkCustomerDebtorRegistry(customerTaxId)).thenReturn(customerCheckResultDto);
 
@@ -42,7 +41,7 @@ class DebtorEvaluationRuleTest {
     @Test
     void shouldNotApproveLoanRequestWhenReachedAgeThresholdIsNotAcceptable() throws Exception {
         //given
-        var loanRequestDto = createSimpleLoanRequestDto(customerTaxId);
+        var loanRequestDto = createEvaluationData(customerTaxId);
         var customerCheckResultDto = createCustomerCheckResultDto(customerTaxId, true);
         when(loanDebtorRegistryCircuitBreaker.checkCustomerDebtorRegistry(customerTaxId)).thenReturn(customerCheckResultDto);
 
@@ -57,7 +56,7 @@ class DebtorEvaluationRuleTest {
     @Test
     void shouldNotApproveLoanRequestWhenThereWasThirdPartyServiceConnectionProblem() throws Exception {
         //given
-        var loanRequestDto = createSimpleLoanRequestDto(customerTaxId);
+        var loanRequestDto = createEvaluationData(customerTaxId);
         when(loanDebtorRegistryCircuitBreaker.checkCustomerDebtorRegistry(customerTaxId)).thenThrow(new Exception());
 
         //when
@@ -68,8 +67,11 @@ class DebtorEvaluationRuleTest {
         assertThat(evaluationResultDetails.getEvaluationMessage()).isNotBlank();
     }
 
-    private LoanRequestDto createSimpleLoanRequestDto(String customerTaxId) {
-        return LoanRequestDto.Builder.loanRequestDto().withCustomerTaxId(customerTaxId).build();
+    private EvaluationData createEvaluationData(String customerTaxId) {
+        return EvaluationData.Builder
+                .evaluationData()
+                .withCustomerTaxId(customerTaxId)
+                .build();
     }
 
     private CustomerCheckResultDto createCustomerCheckResultDto(String customerTaxId, Boolean isRegisteredDebtor) {

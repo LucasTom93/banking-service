@@ -32,6 +32,10 @@ class NumberOfInstallments {
         return new NumberOfInstallments(value);
     }
 
+    Integer getValue() {
+        return value;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

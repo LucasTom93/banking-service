@@ -14,8 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.asc.loanservice.annotations.DomainAggregateRoot;
-import com.asc.loanservice.contracts.LoanRequestDto;
 import com.asc.loanservice.contracts.LoanRequestEvaluationResult;
+import com.asc.loanservice.domain.evaluation.EvaluationData;
 import com.asc.loanservice.domain.evaluation.LoanRequestEvaluationResultDetails;
 import com.asc.loanservice.domain.evaluation.LoanRequestEvaluationRule;
 
@@ -54,13 +54,26 @@ class LoanRequest {
         return loanRequestEvaluationResult;
     }
 
-    void evaluate(LoanRequestDto loanRequestDto, Set<LoanRequestEvaluationRule> loanRequestEvaluationRules) {
+    void evaluate(Set<LoanRequestEvaluationRule> loanRequestEvaluationRules) {
+        var evaluationData = prepareEvaluationData();
         var loanRequestEvaluationDetailsSet = loanRequestEvaluationRules
                 .stream()
-                .map(rule -> rule.evaluate(loanRequestDto))
+                .map(rule -> rule.evaluate(evaluationData))
                 .collect(Collectors.toSet());
         var areAllEvaluationRulesApproved = checkAllEvaluationRulesAreApproved(loanRequestEvaluationDetailsSet);
         loanRequestEvaluationResult = areAllEvaluationRulesApproved ? LoanRequestEvaluationResult.APPROVED : LoanRequestEvaluationResult.REJECTED;
+    }
+
+    private EvaluationData prepareEvaluationData() {
+        return EvaluationData.Builder
+                .evaluationData()
+                .withCustomerDateOfBirth(customerDateOfBirth.getValue())
+                .withCustomerMonthlyIncome(customerMonthlyIncome.getValue())
+                .withCustomerTaxId(customerTaxId.getValue())
+                .withFirstInstallmentDate(firstInstallmentDate.getValue())
+                .withLoanAmount(loanAmount.getValue())
+                .withNumberOfInstallments(numberOfInstallments.getValue())
+                .build();
     }
 
     private boolean checkAllEvaluationRulesAreApproved(Set<LoanRequestEvaluationResultDetails> loanRequestEvaluationDetailsSet) {

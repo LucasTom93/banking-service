@@ -2,7 +2,6 @@ package com.asc.loanservice.domain.evaluation;
 
 import org.springframework.stereotype.Component;
 
-import com.asc.loanservice.contracts.LoanRequestDto;
 import com.asc.loanservice.contracts.LoanRequestEvaluationResult;
 
 @Component
@@ -14,10 +13,10 @@ class DebtorEvaluationRule implements LoanRequestEvaluationRule {
     }
 
     @Override
-    public LoanRequestEvaluationResultDetails evaluate(LoanRequestDto loanRequestDto) {
+    public LoanRequestEvaluationResultDetails evaluate(EvaluationData evaluationData) {
         LoanRequestEvaluationResultDetails resultDetails;
         try {
-            var customerCheckResultDto = loanDebtorRegistryCircuitBreaker.checkCustomerDebtorRegistry(loanRequestDto.getCustomerTaxId());
+            var customerCheckResultDto = loanDebtorRegistryCircuitBreaker.checkCustomerDebtorRegistry(evaluationData.getCustomerTaxId());
             var isCustomerInDebtorList = Boolean.TRUE.equals(customerCheckResultDto.getRegisteredDebtor());
             if (isCustomerInDebtorList) {
                 resultDetails = createRejectedResult();

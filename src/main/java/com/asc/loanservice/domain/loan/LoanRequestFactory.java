@@ -41,7 +41,7 @@ class LoanRequestFactory {
                 .withCustomerTaxId(customerTaxId)
                 .build();
 
-        loanRequest.evaluate(loanRequestDto, loanRequestEvaluationFacade.getLoanRequestEvaluationRules());
+        loanRequest.evaluate(loanRequestEvaluationFacade.getLoanRequestEvaluationRules());
 
         return loanRequest;
     }
