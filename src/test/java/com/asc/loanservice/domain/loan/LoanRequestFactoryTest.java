@@ -67,14 +67,14 @@ class LoanRequestFactoryTest {
                 "loanRequestEvaluationResult"
         ).containsExactly(
                 loanRequestNumber,
-                loanRequestDto.getLoanAmount(),
-                loanRequestDto.getNumberOfInstallments(),
-                loanRequestDto.getFirstInstallmentDate(),
+                LoanAmount.of(loanRequestDto.getLoanAmount()),
+                NumberOfInstallments.of(loanRequestDto.getNumberOfInstallments()),
+                FirstInstallmentDate.of(loanRequestDto.getFirstInstallmentDate(), currentDate),
                 currentDateTime,
-                loanRequestDto.getCustomerName(),
-                loanRequestDto.getCustomerBirthday(),
-                loanRequestDto.getCustomerMonthlyIncome(),
-                loanRequestDto.getCustomerTaxId(),
+                CustomerName.of(loanRequestDto.getCustomerName()),
+                CustomerDateOfBirth.of(loanRequestDto.getCustomerBirthday(), currentDate),
+                CustomerMonthlyIncome.of(loanRequestDto.getCustomerMonthlyIncome()),
+                CustomerTaxId.of(loanRequestDto.getCustomerTaxId()),
                 loanRequestEvaluationResultDetails.getLoanRequestEvaluationResult()
         );
     }
