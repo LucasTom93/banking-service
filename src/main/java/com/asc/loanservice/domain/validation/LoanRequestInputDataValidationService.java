@@ -1,4 +1,4 @@
-package com.asc.loanservice.domain.loan.validation;
+package com.asc.loanservice.domain.validation;
 
 import java.util.stream.Stream;
 

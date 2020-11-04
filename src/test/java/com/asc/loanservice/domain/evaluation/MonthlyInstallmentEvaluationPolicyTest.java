@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Test;
 
 import com.asc.loanservice.contracts.LoanRequestEvaluationResult;
 
-class MonthlyInstallmentEvaluationRuleTest {
-    private MonthlyInstallmentEvaluationRule monthlyInstallmentEvaluationRule = new MonthlyInstallmentEvaluationRule();
+class MonthlyInstallmentEvaluationPolicyTest {
+    private MonthlyInstallmentEvaluationPolicy monthlyInstallmentEvaluationRule = new MonthlyInstallmentEvaluationPolicy();
 
     @Test
     void shouldApproveLoanRequestWhenReachedAgeThresholdAcceptable() {

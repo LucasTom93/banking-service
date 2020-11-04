@@ -1,12 +1,13 @@
 package com.asc.loanservice.domain.loan;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.persistence.Column;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -16,8 +17,8 @@ import javax.persistence.Table;
 import com.asc.loanservice.annotations.DomainAggregateRoot;
 import com.asc.loanservice.contracts.LoanRequestEvaluationResult;
 import com.asc.loanservice.domain.evaluation.EvaluationData;
+import com.asc.loanservice.domain.evaluation.LoanRequestEvaluationPolicy;
 import com.asc.loanservice.domain.evaluation.LoanRequestEvaluationResultDetails;
-import com.asc.loanservice.domain.evaluation.LoanRequestEvaluationRule;
 
 @Entity
 @Table(name = "LOAN_REQUEST")
@@ -26,25 +27,25 @@ class LoanRequest {
     @Id
     @Column(name = "LOAN_REQUEST_NUMBER")
     private String loanRequestNumber;
-    @Embedded
-    private LoanAmount loanAmount;
-    @Embedded
-    private NumberOfInstallments numberOfInstallments;
-    @Embedded
-    private FirstInstallmentDate firstInstallmentDate;
+    @Column(name = "LOAN_AMOUNT", nullable = false)
+    private BigDecimal loanAmount;
+    @Column(name = "LOAN_NUMBER_OF_INSTALLMENTS", nullable = false)
+    private Integer numberOfInstallments;
+    @Column(name = "LOAN_FIRST_INSTALLMENT_DATE", nullable = false)
+    private LocalDate firstInstallmentDate;
     @Column(name = "LOAN_REGISTRATION_DATE", nullable = false)
     private LocalDateTime registrationDate;
     @Enumerated(EnumType.STRING)
     @Column(name = "LOAN_EVALUATION_RESULT", nullable = false)
     private LoanRequestEvaluationResult loanRequestEvaluationResult;
-    @Embedded
-    private CustomerName customerName;
-    @Embedded
-    private CustomerDateOfBirth customerDateOfBirth;
-    @Embedded
-    private CustomerMonthlyIncome customerMonthlyIncome;
-    @Embedded
-    private CustomerTaxId customerTaxId;
+    @Column(name = "CUSTOMER_NAME", nullable = false)
+    private String customerName;
+    @Column(name = "CUSTOMER_DATE_OF_BIRTH", nullable = false)
+    private LocalDate customerDateOfBirth;
+    @Column(name = "CUSTOMER_MONTHLY_INCOME", nullable = false)
+    private BigDecimal customerMonthlyIncome;
+    @Column(name = "CUSTOMER_TAX_ID", nullable = false)
+    private String customerTaxId;
 
     String getLoanRequestNumber() {
         return loanRequestNumber;
@@ -54,9 +55,9 @@ class LoanRequest {
         return loanRequestEvaluationResult;
     }
 
-    void evaluate(Set<LoanRequestEvaluationRule> loanRequestEvaluationRules) {
+    void evaluate(Set<LoanRequestEvaluationPolicy> loanRequestEvaluationPolicies) {
         var evaluationData = prepareEvaluationData();
-        var loanRequestEvaluationDetailsSet = loanRequestEvaluationRules
+        var loanRequestEvaluationDetailsSet = loanRequestEvaluationPolicies
                 .stream()
                 .map(rule -> rule.evaluate(evaluationData))
                 .collect(Collectors.toSet());
@@ -67,12 +68,12 @@ class LoanRequest {
     private EvaluationData prepareEvaluationData() {
         return EvaluationData.Builder
                 .evaluationData()
-                .withCustomerDateOfBirth(customerDateOfBirth.getValue())
-                .withCustomerMonthlyIncome(customerMonthlyIncome.getValue())
-                .withCustomerTaxId(customerTaxId.getValue())
-                .withFirstInstallmentDate(firstInstallmentDate.getValue())
-                .withLoanAmount(loanAmount.getValue())
-                .withNumberOfInstallments(numberOfInstallments.getValue())
+                .withCustomerDateOfBirth(customerDateOfBirth)
+                .withCustomerMonthlyIncome(customerMonthlyIncome)
+                .withCustomerTaxId(customerTaxId)
+                .withFirstInstallmentDate(firstInstallmentDate)
+                .withLoanAmount(loanAmount)
+                .withNumberOfInstallments(numberOfInstallments)
                 .build();
     }
 
@@ -87,7 +88,7 @@ class LoanRequest {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof LoanRequest)) return false;
-        LoanRequest that = (LoanRequest) o;
+        var that = (LoanRequest) o;
         return Objects.equals(loanRequestNumber, that.loanRequestNumber);
     }
 
@@ -98,14 +99,14 @@ class LoanRequest {
 
     static final class Builder {
         private String loanRequestNumber;
-        private LoanAmount loanAmount;
-        private NumberOfInstallments numberOfInstallments;
-        private FirstInstallmentDate firstInstallmentDate;
+        private BigDecimal loanAmount;
+        private Integer numberOfInstallments;
+        private LocalDate firstInstallmentDate;
         private LocalDateTime registrationDate;
-        private CustomerName customerName;
-        private CustomerDateOfBirth customerDateOfBirth;
-        private CustomerMonthlyIncome customerMonthlyIncome;
-        private CustomerTaxId customerTaxId;
+        private String customerName;
+        private LocalDate customerDateOfBirth;
+        private BigDecimal customerMonthlyIncome;
+        private String customerTaxId;
 
         private Builder() {
         }
@@ -119,17 +120,17 @@ class LoanRequest {
             return this;
         }
 
-        Builder withLoanAmount(LoanAmount loanAmount) {
+        Builder withLoanAmount(BigDecimal loanAmount) {
             this.loanAmount = loanAmount;
             return this;
         }
 
-        Builder withNumberOfInstallments(NumberOfInstallments numberOfInstallments) {
+        Builder withNumberOfInstallments(Integer numberOfInstallments) {
             this.numberOfInstallments = numberOfInstallments;
             return this;
         }
 
-        Builder withFirstInstallmentDate(FirstInstallmentDate firstInstallmentDate) {
+        Builder withFirstInstallmentDate(LocalDate firstInstallmentDate) {
             this.firstInstallmentDate = firstInstallmentDate;
             return this;
         }
@@ -139,22 +140,22 @@ class LoanRequest {
             return this;
         }
 
-        Builder withCustomerName(CustomerName customerName) {
+        Builder withCustomerName(String customerName) {
             this.customerName = customerName;
             return this;
         }
 
-        Builder withCustomerDateOfBirth(CustomerDateOfBirth customerDateOfBirth) {
+        Builder withCustomerDateOfBirth(LocalDate customerDateOfBirth) {
             this.customerDateOfBirth = customerDateOfBirth;
             return this;
         }
 
-        Builder withCustomerMonthlyIncome(CustomerMonthlyIncome customerMonthlyIncome) {
+        Builder withCustomerMonthlyIncome(BigDecimal customerMonthlyIncome) {
             this.customerMonthlyIncome = customerMonthlyIncome;
             return this;
         }
 
-        Builder withCustomerTaxId(CustomerTaxId customerTaxId) {
+        Builder withCustomerTaxId(String customerTaxId) {
             this.customerTaxId = customerTaxId;
             return this;
         }
@@ -164,8 +165,8 @@ class LoanRequest {
             loanRequest.registrationDate = this.registrationDate;
             loanRequest.loanAmount = this.loanAmount;
             loanRequest.customerTaxId = this.customerTaxId;
-            loanRequest.customerName = this.customerName;
             loanRequest.numberOfInstallments = this.numberOfInstallments;
+            loanRequest.customerName = this.customerName;
             loanRequest.customerMonthlyIncome = this.customerMonthlyIncome;
             loanRequest.firstInstallmentDate = this.firstInstallmentDate;
             loanRequest.customerDateOfBirth = this.customerDateOfBirth;

@@ -4,12 +4,9 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Period;
 
-import org.springframework.stereotype.Component;
-
 import com.asc.loanservice.contracts.LoanRequestEvaluationResult;
 
-@Component
-class CustomerAgeEvaluationRule implements LoanRequestEvaluationRule {
+class CustomerAgeEvaluationPolicy implements LoanRequestEvaluationPolicy {
     //This constant could be taken from system configuration with its default
     private static final int CUSTOMER_AGE_THRESHOLD = 65;
 

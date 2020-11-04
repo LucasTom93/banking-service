@@ -1,14 +1,11 @@
 package com.asc.loanservice.domain.evaluation;
 
-import org.springframework.stereotype.Component;
-
 import com.asc.loanservice.contracts.LoanRequestEvaluationResult;
 
-@Component
-class DebtorEvaluationRule implements LoanRequestEvaluationRule {
+class DebtorEvaluationPolicy implements LoanRequestEvaluationPolicy {
     private final LoanDebtorRegistryCircuitBreaker loanDebtorRegistryCircuitBreaker;
 
-    DebtorEvaluationRule(LoanDebtorRegistryCircuitBreaker loanDebtorRegistryCircuitBreaker) {
+    DebtorEvaluationPolicy(LoanDebtorRegistryCircuitBreaker loanDebtorRegistryCircuitBreaker) {
         this.loanDebtorRegistryCircuitBreaker = loanDebtorRegistryCircuitBreaker;
     }
 

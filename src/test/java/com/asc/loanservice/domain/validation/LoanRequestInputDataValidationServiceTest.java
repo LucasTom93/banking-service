@@ -1,4 +1,4 @@
-package com.asc.loanservice.domain.loan.validation;
+package com.asc.loanservice.domain.validation;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;

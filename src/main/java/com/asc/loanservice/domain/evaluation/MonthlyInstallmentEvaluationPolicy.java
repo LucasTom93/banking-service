@@ -3,12 +3,9 @@ package com.asc.loanservice.domain.evaluation;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-import org.springframework.stereotype.Component;
-
 import com.asc.loanservice.contracts.LoanRequestEvaluationResult;
 
-@Component
-class MonthlyInstallmentEvaluationRule implements LoanRequestEvaluationRule {
+class MonthlyInstallmentEvaluationPolicy implements LoanRequestEvaluationPolicy {
     //All these constants could be taken from system configuration with theirs defaults
     private static final int BIG_DECIMAL_SCALE = 5;
     private static final BigDecimal PERCENTAGE_RISK_THRESHOLD = BigDecimal.valueOf(0.15);

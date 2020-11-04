@@ -14,12 +14,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.asc.loanservice.contracts.LoanRequestEvaluationResult;
 
 @ExtendWith(MockitoExtension.class)
-class DebtorEvaluationRuleTest {
+class DebtorEvaluationPolicyTest {
 
     @Mock
     private LoanDebtorRegistryCircuitBreaker loanDebtorRegistryCircuitBreaker;
     @InjectMocks
-    private DebtorEvaluationRule debtorEvaluationRule;
+    private DebtorEvaluationPolicy debtorEvaluationRule;
 
     private final String customerTaxId = UUID.randomUUID().toString();
 

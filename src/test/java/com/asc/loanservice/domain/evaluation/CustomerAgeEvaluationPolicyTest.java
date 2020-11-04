@@ -9,9 +9,9 @@ import org.junit.jupiter.api.Test;
 
 import com.asc.loanservice.contracts.LoanRequestEvaluationResult;
 
-class CustomerAgeEvaluationRuleTest {
+class CustomerAgeEvaluationPolicyTest {
 
-    private CustomerAgeEvaluationRule customerAgeEvaluationRule = new CustomerAgeEvaluationRule();
+    private CustomerAgeEvaluationPolicy customerAgeEvaluationRule = new CustomerAgeEvaluationPolicy();
 
     @Test
     void shouldApproveLoanRequestWhenReachedAgeThresholdAcceptable() {
