@@ -5,14 +5,16 @@ import java.util.Set;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.banking.loan.domain.LoanRequestValueObjectFactory;
+
 @Configuration
 class LoanRequestEvaluationPolicyConfiguration {
 
     @Bean
-    LoanRequestEvaluationPolicyProvider loanRequestEvaluationPolicyProvider(LoanDebtorRegistryCircuitBreaker loanDebtorRegistryCircuitBreaker) {
+    LoanRequestEvaluationPolicyProvider loanRequestEvaluationPolicyProvider(LoanDebtorRegistryCircuitBreaker loanDebtorRegistryCircuitBreaker, LoanRequestValueObjectFactory loanRequestValueObjectFactory) {
         return new LoanRequestEvaluationPolicyProvider(Set.of(
-                new CustomerAgeEvaluationPolicy(),
-                new MonthlyInstallmentEvaluationPolicy(),
+                new CustomerAgeEvaluationPolicy(loanRequestValueObjectFactory),
+                new MonthlyInstallmentEvaluationPolicy(loanRequestValueObjectFactory),
                 new DebtorEvaluationPolicy(loanDebtorRegistryCircuitBreaker)
         ));
     }

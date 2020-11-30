@@ -6,10 +6,11 @@ import java.math.BigDecimal;
 
 import org.junit.jupiter.api.Test;
 
+import com.banking.loan.domain.LoanRequestValueObjectFactory;
 import com.banking.shared.contracts.LoanRequestEvaluationResult;
 
 class MonthlyInstallmentEvaluationPolicyTest {
-    private MonthlyInstallmentEvaluationPolicy monthlyInstallmentEvaluationRule = new MonthlyInstallmentEvaluationPolicy();
+    private MonthlyInstallmentEvaluationPolicy monthlyInstallmentEvaluationRule = new MonthlyInstallmentEvaluationPolicy(new LoanRequestValueObjectFactory());
 
     @Test
     void shouldApproveLoanRequestWhenReachedAgeThresholdAcceptable() {

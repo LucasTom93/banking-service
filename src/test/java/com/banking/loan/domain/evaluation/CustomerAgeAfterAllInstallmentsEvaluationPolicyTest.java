@@ -7,11 +7,12 @@ import java.time.Month;
 
 import org.junit.jupiter.api.Test;
 
+import com.banking.loan.domain.LoanRequestValueObjectFactory;
 import com.banking.shared.contracts.LoanRequestEvaluationResult;
 
-class CustomerAgeEvaluationPolicyTest {
+class CustomerAgeAfterAllInstallmentsEvaluationPolicyTest {
 
-    private CustomerAgeEvaluationPolicy customerAgeEvaluationRule = new CustomerAgeEvaluationPolicy();
+    private CustomerAgeEvaluationPolicy customerAgeEvaluationRule = new CustomerAgeEvaluationPolicy(new LoanRequestValueObjectFactory());
 
     @Test
     void shouldApproveLoanRequestWhenReachedAgeThresholdAcceptable() {
