@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.banking.loan.domain.LoanRequestValueObjectFactory;
+import com.banking.loan.infrastructure.LoanDebtorRegistryCircuitBreaker;
 
 @Configuration
 class LoanRequestEvaluationPolicyConfiguration {

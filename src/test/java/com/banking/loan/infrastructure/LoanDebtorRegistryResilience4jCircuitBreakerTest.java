@@ -1,4 +1,4 @@
-package com.banking.loan.domain.evaluation;
+package com.banking.loan.infrastructure;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -12,13 +12,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.banking.loan.domain.evaluation.CustomerCheckResultDto;
+
 @ExtendWith(MockitoExtension.class)
-class LoanDebtorRegistryCircuitBreakerTest {
+class LoanDebtorRegistryResilience4jCircuitBreakerTest {
 
     @Mock
     private DebtorRegistryFeignClient debtorRegistryFeignClient;
     @InjectMocks
-    private LoanDebtorRegistryCircuitBreaker loanDebtorRegistryCircuitBreaker;
+    private LoanDebtorRegistryResilience4jCircuitBreaker loanDebtorRegistryResilience4jCircuitBreaker;
 
     @Test
     void shouldCheckCustomerInDebtorRegistry() throws Exception {
@@ -28,7 +30,7 @@ class LoanDebtorRegistryCircuitBreakerTest {
         when(debtorRegistryFeignClient.check(customerTaxId)).thenReturn(customerCheckResultFromFeignClient);
 
         //when
-        var customerCheckCircuitBreakerResult = loanDebtorRegistryCircuitBreaker.checkCustomerDebtorRegistry(customerTaxId);
+        var customerCheckCircuitBreakerResult = loanDebtorRegistryResilience4jCircuitBreaker.checkCustomerDebtorRegistry(customerTaxId);
 
         //then
         assertThat(customerCheckCircuitBreakerResult).isEqualTo(customerCheckResultFromFeignClient);

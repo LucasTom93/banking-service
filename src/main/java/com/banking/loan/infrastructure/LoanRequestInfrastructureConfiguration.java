@@ -16,4 +16,9 @@ class LoanRequestInfrastructureConfiguration {
     LoanRequestQueryRepository loanRequestQueryRepository(JdbcOperations jdbcOperations) {
         return new LoanRequestQueryJDBCRepository(jdbcOperations);
     }
+
+    @Bean
+    LoanDebtorRegistryCircuitBreaker loanDebtorRegistryCircuitBreaker(DebtorRegistryFeignClient debtorRegistryFeignClient) {
+        return new LoanDebtorRegistryResilience4jCircuitBreaker(debtorRegistryFeignClient);
+    }
 }

@@ -11,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.banking.loan.infrastructure.LoanDebtorRegistryCircuitBreaker;
 import com.banking.shared.contracts.LoanRequestEvaluationResult;
 
 @ExtendWith(MockitoExtension.class)
