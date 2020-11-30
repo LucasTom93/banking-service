@@ -4,16 +4,16 @@ import java.time.LocalDate;
 
 import com.asc.loanservice.contracts.LoanRequestDto;
 
-class CustomerDateOfBirthSpecification implements LoanRequestInputDataSpecification {
+class CustomerDateOfBirthValidator implements LoanRequestIncomingDataValidator {
 
     private final LocalDate currentDate;
 
-    CustomerDateOfBirthSpecification(LocalDate currentDate) {
+    CustomerDateOfBirthValidator(LocalDate currentDate) {
         this.currentDate = currentDate;
     }
 
     @Override
-    public boolean isSatisfiedBy(LoanRequestDto loanRequestDto) {
+    public boolean isValid(LoanRequestDto loanRequestDto) {
         var customerDateOfBirth = loanRequestDto.getCustomerBirthday();
         if (customerDateOfBirth == null) {
             return false;

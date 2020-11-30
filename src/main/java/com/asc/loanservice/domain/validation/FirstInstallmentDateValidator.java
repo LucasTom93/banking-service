@@ -4,16 +4,16 @@ import java.time.LocalDate;
 
 import com.asc.loanservice.contracts.LoanRequestDto;
 
-class FirstInstallmentDateSpecification implements LoanRequestInputDataSpecification {
+class FirstInstallmentDateValidator implements LoanRequestIncomingDataValidator {
 
     private final LocalDate currentDate;
 
-    FirstInstallmentDateSpecification(LocalDate currentDate) {
+    FirstInstallmentDateValidator(LocalDate currentDate) {
         this.currentDate = currentDate;
     }
 
     @Override
-    public boolean isSatisfiedBy(LoanRequestDto loanRequestDto) {
+    public boolean isValid(LoanRequestDto loanRequestDto) {
         var firstInstallmentDate = loanRequestDto.getFirstInstallmentDate();
         if (firstInstallmentDate == null) {
             return false;

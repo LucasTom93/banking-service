@@ -22,14 +22,14 @@ public class LoanRequestInputDataValidationService {
 
         var currentDate = clock.getCurrentDate();
         var inputDataSpecificationStream = Stream.of(
-                LoanRequestInputDataSpecificationFactory.customerDateOfBirthSpecification(currentDate),
-                LoanRequestInputDataSpecificationFactory.firstInstallmentDateSpecification(currentDate),
-                LoanRequestInputDataSpecificationFactory.customerMonthlyIncomeSpecification(),
-                LoanRequestInputDataSpecificationFactory.customerNameSpecification(),
-                LoanRequestInputDataSpecificationFactory.customerTaxIdSpecification(),
-                LoanRequestInputDataSpecificationFactory.loanAmountSpecification(),
-                LoanRequestInputDataSpecificationFactory.numberOfInstallmentsSpecification()
+                LoanRequestInputDataValidatorFactory.customerDateOfBirthValidator(currentDate),
+                LoanRequestInputDataValidatorFactory.firstInstallmentDateValidator(currentDate),
+                LoanRequestInputDataValidatorFactory.customerMonthlyIncomeValidator(),
+                LoanRequestInputDataValidatorFactory.customerNameValidator(),
+                LoanRequestInputDataValidatorFactory.customerTaxIdValidator(),
+                LoanRequestInputDataValidatorFactory.loanAmountValidator(),
+                LoanRequestInputDataValidatorFactory.numberOfInstallmentsValidator()
         );
-        return inputDataSpecificationStream.allMatch(specification -> specification.isSatisfiedBy(loanRequestDto));
+        return inputDataSpecificationStream.allMatch(validator -> validator.isValid(loanRequestDto));
     }
 }

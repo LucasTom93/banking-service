@@ -4,10 +4,10 @@ import java.math.BigDecimal;
 
 import com.asc.loanservice.contracts.LoanRequestDto;
 
-class LoanAmountSpecification implements LoanRequestInputDataSpecification {
+class LoanAmountValidator implements LoanRequestIncomingDataValidator {
 
     @Override
-    public boolean isSatisfiedBy(LoanRequestDto loanRequestDto) {
+    public boolean isValid(LoanRequestDto loanRequestDto) {
         var loanAmount = loanRequestDto.getLoanAmount();
         if (loanAmount == null) {
             return false;

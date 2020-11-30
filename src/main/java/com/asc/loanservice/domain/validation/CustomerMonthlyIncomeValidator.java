@@ -4,10 +4,10 @@ import java.math.BigDecimal;
 
 import com.asc.loanservice.contracts.LoanRequestDto;
 
-class CustomerMonthlyIncomeSpecification implements LoanRequestInputDataSpecification {
+class CustomerMonthlyIncomeValidator implements LoanRequestIncomingDataValidator {
 
     @Override
-    public boolean isSatisfiedBy(LoanRequestDto loanRequestDto) {
+    public boolean isValid(LoanRequestDto loanRequestDto) {
         var customerMonthlyIncome = loanRequestDto.getCustomerMonthlyIncome();
         if (customerMonthlyIncome == null) {
             return false;
