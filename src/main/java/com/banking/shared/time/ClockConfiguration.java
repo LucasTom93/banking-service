@@ -4,10 +4,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
-import com.banking.LoanServiceApplication;
+import com.banking.BankingServiceApplication;
 
 @Configuration
-@Profile(LoanServiceApplication.Profile.PRODUCTION)
+@Profile(BankingServiceApplication.Profiles.PRODUCTION)
 class ClockConfiguration {
 
     @Bean

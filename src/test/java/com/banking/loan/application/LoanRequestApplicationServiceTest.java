@@ -9,16 +9,13 @@ import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
-import com.banking.LoanServiceApplication;
+import com.banking.EndToEndTest;
 import com.banking.loan.api.contracts.LoanRequestDto;
 import com.banking.loan.api.contracts.LoanRequestEvaluationResult;
 import com.banking.loan.application.validation.LoanValidationException;
 
-@SpringBootTest(classes = LoanServiceApplication.class)
-@ActiveProfiles("TEST")
+@EndToEndTest
 class LoanRequestApplicationServiceTest {
 
     @Autowired
