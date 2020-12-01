@@ -1,7 +1,7 @@
 package com.banking.loan.domain.evaluation;
 
+import com.banking.loan.api.contracts.LoanRequestEvaluationResult;
 import com.banking.loan.infrastructure.LoanDebtorRegistryCircuitBreaker;
-import com.banking.shared.contracts.LoanRequestEvaluationResult;
 
 class DebtorEvaluationPolicy implements LoanRequestEvaluationPolicy {
     private final LoanDebtorRegistryCircuitBreaker loanDebtorRegistryCircuitBreaker;

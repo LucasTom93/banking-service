@@ -2,7 +2,7 @@ package com.banking.loan.application.validation;
 
 import java.time.LocalDate;
 
-import com.banking.shared.contracts.LoanRequestDto;
+import com.banking.loan.api.contracts.LoanRequestDto;
 
 class CustomerDateOfBirthValidator implements LoanRequestIncomingDataValidator {
 

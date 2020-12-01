@@ -1,6 +1,6 @@
 package com.banking.loan.application.validation;
 
-import com.banking.shared.contracts.LoanRequestDto;
+import com.banking.loan.api.contracts.LoanRequestDto;
 
 class CustomerNameValidator implements LoanRequestIncomingDataValidator {
 

@@ -1,8 +1,8 @@
 package com.banking.loan.domain.evaluation;
 
+import com.banking.loan.api.contracts.LoanRequestEvaluationResult;
 import com.banking.loan.domain.CustomerAgeAfterAllInstallments;
 import com.banking.loan.domain.LoanRequestValueObjectFactory;
-import com.banking.shared.contracts.LoanRequestEvaluationResult;
 
 class CustomerAgeEvaluationPolicy implements LoanRequestEvaluationPolicy {
     //This constant could be taken from system configuration with its default

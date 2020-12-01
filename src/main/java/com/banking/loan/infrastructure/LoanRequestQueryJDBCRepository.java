@@ -8,8 +8,8 @@ import java.util.Optional;
 import org.springframework.jdbc.core.ColumnMapRowMapper;
 import org.springframework.jdbc.core.JdbcOperations;
 
-import com.banking.shared.contracts.LoanRequestDataDto;
-import com.banking.shared.contracts.LoanRequestEvaluationResult;
+import com.banking.loan.api.contracts.LoanRequestDataDto;
+import com.banking.loan.api.contracts.LoanRequestEvaluationResult;
 
 class LoanRequestQueryJDBCRepository implements LoanRequestQueryRepository {
     private final JdbcOperations jdbcOperations;

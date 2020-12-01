@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.banking.loan.api.contracts.LoanRequestDataDto;
+import com.banking.loan.api.contracts.LoanRequestDto;
 import com.banking.loan.application.LoanRequestApplicationService;
 import com.banking.loan.application.validation.LoanValidationException;
 import com.banking.loan.infrastructure.LoanRequestQueryRepository;
-import com.banking.shared.contracts.LoanRequestDataDto;
-import com.banking.shared.contracts.LoanRequestDto;
 
 @RestController
 @RequestMapping("/api/loans")

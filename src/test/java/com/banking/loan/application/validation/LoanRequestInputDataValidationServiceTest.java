@@ -10,7 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.banking.shared.contracts.LoanRequestDto;
+import com.banking.loan.api.contracts.LoanRequestDto;
 import com.banking.shared.time.Clock;
 
 @ExtendWith(MockitoExtension.class)

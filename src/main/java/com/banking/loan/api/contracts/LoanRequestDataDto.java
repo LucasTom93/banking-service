@@ -1,10 +1,11 @@
-package com.banking.shared.contracts;
+package com.banking.loan.api.contracts;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Objects;
+import java.time.LocalDateTime;
 
-public class LoanRequestDto {
+public class LoanRequestDataDto {
+    private String loanRequestNumber;
     private String customerName;
     private LocalDate customerBirthday;
     private String customerTaxId;
@@ -12,6 +13,12 @@ public class LoanRequestDto {
     private BigDecimal loanAmount;
     private Integer numberOfInstallments;
     private LocalDate firstInstallmentDate;
+    private LoanRequestEvaluationResult evaluationResult;
+    private LocalDateTime registrationDate;
+
+    public String getLoanRequestNumber() {
+        return loanRequestNumber;
+    }
 
     public String getCustomerName() {
         return customerName;
@@ -41,7 +48,16 @@ public class LoanRequestDto {
         return firstInstallmentDate;
     }
 
+    public LoanRequestEvaluationResult getEvaluationResult() {
+        return evaluationResult;
+    }
+
+    public LocalDateTime getRegistrationDate() {
+        return registrationDate;
+    }
+
     public static final class Builder {
+        private String loanRequestNumber;
         private String customerName;
         private LocalDate customerBirthday;
         private String customerTaxId;
@@ -49,12 +65,19 @@ public class LoanRequestDto {
         private BigDecimal loanAmount;
         private Integer numberOfInstallments;
         private LocalDate firstInstallmentDate;
+        private LoanRequestEvaluationResult evaluationResult;
+        private LocalDateTime registrationDate;
 
         private Builder() {
         }
 
-        public static Builder loanRequestDto() {
+        public static Builder loanRequestDataDto() {
             return new Builder();
+        }
+
+        public Builder withLoanRequestNumber(String loanRequestNumber) {
+            this.loanRequestNumber = loanRequestNumber;
+            return this;
         }
 
         public Builder withCustomerName(String customerName) {
@@ -92,35 +115,29 @@ public class LoanRequestDto {
             return this;
         }
 
-        public LoanRequestDto build() {
-            LoanRequestDto loanRequestDto = new LoanRequestDto();
-            loanRequestDto.firstInstallmentDate = this.firstInstallmentDate;
-            loanRequestDto.customerName = this.customerName;
-            loanRequestDto.customerMonthlyIncome = this.customerMonthlyIncome;
-            loanRequestDto.loanAmount = this.loanAmount;
-            loanRequestDto.customerBirthday = this.customerBirthday;
-            loanRequestDto.numberOfInstallments = this.numberOfInstallments;
-            loanRequestDto.customerTaxId = this.customerTaxId;
-            return loanRequestDto;
+        public Builder withEvaluationResult(LoanRequestEvaluationResult evaluationResult) {
+            this.evaluationResult = evaluationResult;
+            return this;
         }
-    }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        LoanRequestDto that = (LoanRequestDto) o;
-        return Objects.equals(customerName, that.customerName) &&
-                Objects.equals(customerBirthday, that.customerBirthday) &&
-                Objects.equals(customerTaxId, that.customerTaxId) &&
-                Objects.equals(customerMonthlyIncome, that.customerMonthlyIncome) &&
-                Objects.equals(loanAmount, that.loanAmount) &&
-                Objects.equals(numberOfInstallments, that.numberOfInstallments) &&
-                Objects.equals(firstInstallmentDate, that.firstInstallmentDate);
-    }
+        public Builder withRegistrationDate(LocalDateTime registrationDate) {
+            this.registrationDate = registrationDate;
+            return this;
+        }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(customerName, customerBirthday, customerTaxId, customerMonthlyIncome, loanAmount, numberOfInstallments, firstInstallmentDate);
+        public LoanRequestDataDto build() {
+            LoanRequestDataDto loanRequestDataDto = new LoanRequestDataDto();
+            loanRequestDataDto.registrationDate = this.registrationDate;
+            loanRequestDataDto.numberOfInstallments = this.numberOfInstallments;
+            loanRequestDataDto.loanRequestNumber = this.loanRequestNumber;
+            loanRequestDataDto.customerName = this.customerName;
+            loanRequestDataDto.loanAmount = this.loanAmount;
+            loanRequestDataDto.firstInstallmentDate = this.firstInstallmentDate;
+            loanRequestDataDto.evaluationResult = this.evaluationResult;
+            loanRequestDataDto.customerMonthlyIncome = this.customerMonthlyIncome;
+            loanRequestDataDto.customerTaxId = this.customerTaxId;
+            loanRequestDataDto.customerBirthday = this.customerBirthday;
+            return loanRequestDataDto;
+        }
     }
 }

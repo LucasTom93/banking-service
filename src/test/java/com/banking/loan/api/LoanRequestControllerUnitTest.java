@@ -17,13 +17,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import com.banking.loan.api.contracts.LoanRequestDataDto;
+import com.banking.loan.api.contracts.LoanRequestDto;
+import com.banking.loan.api.contracts.LoanRequestEvaluationResult;
+import com.banking.loan.api.contracts.LoanRequestRegistrationResultDto;
 import com.banking.loan.application.LoanRequestApplicationService;
 import com.banking.loan.application.validation.LoanValidationException;
 import com.banking.loan.infrastructure.LoanRequestQueryRepository;
-import com.banking.shared.contracts.LoanRequestDataDto;
-import com.banking.shared.contracts.LoanRequestDto;
-import com.banking.shared.contracts.LoanRequestEvaluationResult;
-import com.banking.shared.contracts.LoanRequestRegistrationResultDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 

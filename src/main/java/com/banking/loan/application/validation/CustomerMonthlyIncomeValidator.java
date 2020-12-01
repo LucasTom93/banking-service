@@ -2,7 +2,7 @@ package com.banking.loan.application.validation;
 
 import java.math.BigDecimal;
 
-import com.banking.shared.contracts.LoanRequestDto;
+import com.banking.loan.api.contracts.LoanRequestDto;
 
 class CustomerMonthlyIncomeValidator implements LoanRequestIncomingDataValidator {
 

@@ -1,4 +1,4 @@
-package com.banking.shared.contracts;
+package com.banking.loan.api.contracts;
 
 public enum LoanRequestEvaluationResult {
     APPROVED,

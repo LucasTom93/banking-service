@@ -1,12 +1,12 @@
 package com.banking.loan.application;
 
+import com.banking.loan.api.contracts.LoanRequestDto;
+import com.banking.loan.api.contracts.LoanRequestRegistrationResultDto;
 import com.banking.loan.application.validation.LoanRequestInputDataValidationService;
 import com.banking.loan.application.validation.LoanValidationException;
 import com.banking.loan.domain.LoanRequestFactory;
 import com.banking.loan.domain.evaluation.LoanRequestEvaluationPolicyProvider;
 import com.banking.loan.infrastructure.LoanRequestCommandRepository;
-import com.banking.shared.contracts.LoanRequestDto;
-import com.banking.shared.contracts.LoanRequestRegistrationResultDto;
 import com.banking.shared.domain.annotations.ApplicationService;
 
 @ApplicationService

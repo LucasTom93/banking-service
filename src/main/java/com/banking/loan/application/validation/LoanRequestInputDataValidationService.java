@@ -2,7 +2,7 @@ package com.banking.loan.application.validation;
 
 import java.util.stream.Stream;
 
-import com.banking.shared.contracts.LoanRequestDto;
+import com.banking.loan.api.contracts.LoanRequestDto;
 import com.banking.shared.domain.annotations.ApplicationService;
 import com.banking.shared.time.Clock;
 

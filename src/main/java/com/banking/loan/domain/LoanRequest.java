@@ -14,10 +14,10 @@ import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.banking.loan.api.contracts.LoanRequestEvaluationResult;
 import com.banking.loan.domain.evaluation.EvaluationData;
 import com.banking.loan.domain.evaluation.LoanRequestEvaluationPolicy;
 import com.banking.loan.domain.evaluation.LoanRequestEvaluationResultDetails;
-import com.banking.shared.contracts.LoanRequestEvaluationResult;
 import com.banking.shared.domain.annotations.DomainAggregateRoot;
 
 @Entity

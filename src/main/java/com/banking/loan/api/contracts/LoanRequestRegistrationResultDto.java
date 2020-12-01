@@ -1,4 +1,4 @@
-package com.banking.shared.contracts;
+package com.banking.loan.api.contracts;
 
 public class LoanRequestRegistrationResultDto {
     private final String loanRequestNumber;

@@ -1,6 +1,6 @@
 package com.banking.loan.domain.evaluation;
 
-import com.banking.shared.contracts.LoanRequestEvaluationResult;
+import com.banking.loan.api.contracts.LoanRequestEvaluationResult;
 
 public class LoanRequestEvaluationResultDetails {
     private final LoanRequestEvaluationResult loanRequestEvaluationResult;

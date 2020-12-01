@@ -16,10 +16,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.banking.loan.api.contracts.LoanRequestEvaluationResult;
 import com.banking.loan.domain.evaluation.EvaluationData;
 import com.banking.loan.domain.evaluation.LoanRequestEvaluationPolicy;
 import com.banking.loan.domain.evaluation.LoanRequestEvaluationResultDetails;
-import com.banking.shared.contracts.LoanRequestEvaluationResult;
 
 @ExtendWith(MockitoExtension.class)
 class LoanRequestTest {

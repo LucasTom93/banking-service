@@ -13,9 +13,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.banking.LoanServiceApplication;
+import com.banking.loan.api.contracts.LoanRequestDto;
+import com.banking.loan.api.contracts.LoanRequestEvaluationResult;
 import com.banking.loan.application.validation.LoanValidationException;
-import com.banking.shared.contracts.LoanRequestDto;
-import com.banking.shared.contracts.LoanRequestEvaluationResult;
 
 @SpringBootTest(classes = LoanServiceApplication.class)
 @ActiveProfiles("TEST")

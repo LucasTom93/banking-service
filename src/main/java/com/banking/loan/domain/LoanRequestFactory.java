@@ -1,6 +1,6 @@
 package com.banking.loan.domain;
 
-import com.banking.shared.contracts.LoanRequestDto;
+import com.banking.loan.api.contracts.LoanRequestDto;
 import com.banking.shared.domain.annotations.DomainFactory;
 import com.banking.shared.time.Clock;
 
