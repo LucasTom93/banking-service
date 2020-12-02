@@ -1,4 +1,4 @@
-package com.banking.loan.api;
+package com.banking.end2end;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.banking.EndToEndTest;
+import com.banking.loan.api.LoanRequestController;
 import com.banking.loan.api.contracts.LoanRequestDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
