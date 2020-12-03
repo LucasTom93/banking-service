@@ -16,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.banking.loan.api.contracts.LoanRequestDto;
+import com.banking.shared.identity.IdentityGenerator;
 import com.banking.shared.time.Clock;
 
 @ExtendWith(MockitoExtension.class)
@@ -24,7 +25,7 @@ class LoanRequestFactoryTest {
     @Mock
     private Clock clock;
     @Mock
-    private LoanRequestNumberGenerator loanRequestNumberGenerator;
+    private IdentityGenerator identityGenerator;
     @InjectMocks
     private LoanRequestFactory loanRequestFactory;
 
@@ -34,7 +35,7 @@ class LoanRequestFactoryTest {
         var currentDateTime = LocalDateTime.of(2020, Month.JANUARY, 1, 1, 1, 1, 1);
         var loanRequestNumber = UUID.randomUUID().toString();
         var loanRequestDto = createLoanRequestDto();
-        when(loanRequestNumberGenerator.generateLoanRequestNumber()).thenReturn(loanRequestNumber);
+        when(identityGenerator.generateStringId()).thenReturn(loanRequestNumber);
         when(clock.getCurrentLocalDateTime()).thenReturn(currentDateTime);
 
         //when

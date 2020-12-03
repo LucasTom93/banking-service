@@ -2,22 +2,23 @@ package com.banking.loan.domain;
 
 import com.banking.loan.api.contracts.LoanRequestDto;
 import com.banking.shared.domain.annotations.DomainFactory;
+import com.banking.shared.identity.IdentityGenerator;
 import com.banking.shared.time.Clock;
 
 @DomainFactory
 public class LoanRequestFactory {
     private final Clock clock;
-    private final LoanRequestNumberGenerator loanRequestNumberGenerator;
+    private final IdentityGenerator identityGenerator;
 
-    LoanRequestFactory(Clock clock, LoanRequestNumberGenerator loanRequestNumberGenerator) {
+    LoanRequestFactory(Clock clock, IdentityGenerator identityGenerator) {
         this.clock = clock;
-        this.loanRequestNumberGenerator = loanRequestNumberGenerator;
+        this.identityGenerator = identityGenerator;
     }
 
     public LoanRequest createLoanRequest(LoanRequestDto loanRequestDto) {
         return LoanRequest.Builder
                 .loanRequest()
-                .withLoanRequestNumber(loanRequestNumberGenerator.generateLoanRequestNumber())
+                .withLoanRequestNumber(identityGenerator.generateStringId())
                 .withLoanAmount(loanRequestDto.getLoanAmount())
                 .withFirstInstallmentDate(loanRequestDto.getFirstInstallmentDate())
                 .withNumberOfInstallments(loanRequestDto.getNumberOfInstallments())
