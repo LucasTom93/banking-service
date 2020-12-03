@@ -1,4 +1,4 @@
-package com.banking.loan.infrastructure;
+package com.banking.loan.infrastructure.database;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

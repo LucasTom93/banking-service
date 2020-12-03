@@ -12,7 +12,7 @@ import com.banking.loan.api.contracts.LoanRequestDataDto;
 import com.banking.loan.api.contracts.LoanRequestDto;
 import com.banking.loan.application.LoanRequestApplicationService;
 import com.banking.loan.application.validation.LoanValidationException;
-import com.banking.loan.infrastructure.LoanRequestQueryRepository;
+import com.banking.loan.infrastructure.database.LoanRequestQueryRepository;
 
 @RestController
 @RequestMapping("/api/loans")

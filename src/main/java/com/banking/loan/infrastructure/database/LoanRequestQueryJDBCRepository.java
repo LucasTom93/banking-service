@@ -1,4 +1,4 @@
-package com.banking.loan.infrastructure;
+package com.banking.loan.infrastructure.database;
 
 import java.math.BigDecimal;
 import java.sql.Date;

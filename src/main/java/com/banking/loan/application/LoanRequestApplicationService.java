@@ -6,7 +6,7 @@ import com.banking.loan.application.validation.LoanRequestInputDataValidationSer
 import com.banking.loan.application.validation.LoanValidationException;
 import com.banking.loan.domain.LoanRequestFactory;
 import com.banking.loan.domain.evaluation.LoanRequestEvaluationPolicyProvider;
-import com.banking.loan.infrastructure.LoanRequestCommandRepository;
+import com.banking.loan.infrastructure.database.LoanRequestCommandRepository;
 import com.banking.shared.domain.annotations.ApplicationService;
 
 @ApplicationService
