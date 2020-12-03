@@ -1,4 +1,4 @@
-package com.banking.loan.application;
+package com.banking.end2end;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -10,9 +10,9 @@ import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.banking.EndToEndTest;
 import com.banking.loan.api.contracts.LoanRequestDto;
 import com.banking.loan.api.contracts.LoanRequestEvaluationResult;
+import com.banking.loan.application.LoanRequestApplicationService;
 import com.banking.loan.application.validation.LoanValidationException;
 
 @EndToEndTest

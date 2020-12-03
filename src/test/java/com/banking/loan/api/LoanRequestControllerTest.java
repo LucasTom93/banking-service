@@ -28,7 +28,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 @ExtendWith(MockitoExtension.class)
-class LoanRequestControllerUnitTest {
+class LoanRequestControllerTest {
     @Mock
     private LoanRequestApplicationService loanRequestApplicationService;
     @Mock

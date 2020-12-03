@@ -1,4 +1,4 @@
-package com.banking;
+package com.banking.end2end;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
+import com.banking.BankingServiceApplication;
 import com.banking.shared.time.Clock;
 
 @Configuration
