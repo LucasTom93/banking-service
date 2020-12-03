@@ -1,8 +1,6 @@
-package com.banking.loan.infrastructure;
+package com.banking.loan.infrastructure.circuitbreaker;
 
 import java.util.concurrent.Callable;
-
-import com.banking.loan.domain.evaluation.CustomerCheckResultDto;
 
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;

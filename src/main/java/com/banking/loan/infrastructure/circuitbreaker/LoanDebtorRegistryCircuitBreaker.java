@@ -1,6 +1,4 @@
-package com.banking.loan.infrastructure;
-
-import com.banking.loan.domain.evaluation.CustomerCheckResultDto;
+package com.banking.loan.infrastructure.circuitbreaker;
 
 public interface LoanDebtorRegistryCircuitBreaker {
 

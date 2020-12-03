@@ -12,7 +12,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.banking.loan.api.contracts.LoanRequestEvaluationResult;
-import com.banking.loan.infrastructure.LoanDebtorRegistryCircuitBreaker;
+import com.banking.loan.infrastructure.circuitbreaker.CustomerCheckResultDto;
+import com.banking.loan.infrastructure.circuitbreaker.LoanDebtorRegistryCircuitBreaker;
 
 @ExtendWith(MockitoExtension.class)
 class DebtorEvaluationPolicyTest {

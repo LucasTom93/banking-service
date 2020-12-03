@@ -1,4 +1,4 @@
-package com.banking.loan.domain.evaluation;
+package com.banking.loan.infrastructure.circuitbreaker;
 
 public class CustomerCheckResultDto {
     private String customerTaxId;
