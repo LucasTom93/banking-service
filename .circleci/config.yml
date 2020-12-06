@@ -12,7 +12,7 @@ jobs:
       - restore_cache:
           key: banking-service-{{ checksum "pom.xml" }}
 
-      - run: mvn clean install
+      - run: mvn clean integration-test install
       - save_cache:
           paths:
             - ~/.m2
