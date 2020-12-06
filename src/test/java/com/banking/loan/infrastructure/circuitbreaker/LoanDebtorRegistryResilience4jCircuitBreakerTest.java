@@ -1,7 +1,6 @@
 package com.banking.loan.infrastructure.circuitbreaker;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.UUID;
@@ -24,13 +23,24 @@ class LoanDebtorRegistryResilience4jCircuitBreakerTest {
     void shouldCheckCustomerInDebtorRegistry() throws Exception {
         //given
         var customerTaxId = UUID.randomUUID().toString();
-        var customerCheckResultFromFeignClient = mock(CustomerCheckResultDto.class);
+        var isRegisteredDebtor = false;
+        var customerCheckResultFromFeignClient = CustomerCheckResultDto.Builder
+                .customerCheckResultDto()
+                .withCustomerTaxId(customerTaxId)
+                .withIsRegisteredDebtor(isRegisteredDebtor)
+                .build();
         when(debtorRegistryFeignClient.check(customerTaxId)).thenReturn(customerCheckResultFromFeignClient);
 
         //when
         var customerCheckCircuitBreakerResult = loanDebtorRegistryResilience4jCircuitBreaker.checkCustomerDebtorRegistry(customerTaxId);
 
         //then
-        assertThat(customerCheckCircuitBreakerResult).isEqualTo(customerCheckResultFromFeignClient);
+        assertThat(customerCheckCircuitBreakerResult).extracting(
+                "customerTaxId",
+                "registeredDebtor"
+        ).containsExactly(
+                customerTaxId,
+                isRegisteredDebtor
+        );
     }
 }
