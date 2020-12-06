@@ -3,6 +3,7 @@ package com.banking.loan.application.validation;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,7 +23,7 @@ class LoanRequestInputDataValidationServiceTest {
     private LoanRequestInputDataValidationService loanRequestInputDataValidationService;
 
     @Test
-    void shouldPerformValidation() {
+    void shouldPerformValidationWhenDtoIsNotNull() {
         //given
         var loanRequestDto = mock(LoanRequestDto.class);
 
@@ -32,5 +33,18 @@ class LoanRequestInputDataValidationServiceTest {
         //then
         assertThat(validationResult).isNotNull();
         verify(clock).getCurrentDate();
+    }
+
+    @Test
+    void shouldNotPerformValidationWhenDtoIsNull() {
+        //given
+        var loanRequestDto = (LoanRequestDto) null;
+
+        //when
+        var validationResult = loanRequestInputDataValidationService.isValid(loanRequestDto);
+
+        //then
+        assertThat(validationResult).isFalse();
+        verifyZeroInteractions(clock);
     }
 }
