@@ -1,6 +1,5 @@
-package com.banking.loan.infrastructure.database;
+package com.banking.loan.domain;
 
-import com.banking.loan.domain.LoanRequest;
 import com.banking.shared.domain.annotations.DomainRepository;
 
 @DomainRepository

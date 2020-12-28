@@ -4,6 +4,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcOperations;
 
+import com.banking.loan.domain.LoanRequestCommandRepository;
+
 @Configuration
 class LoanRequestInfrastructureConfiguration {
 

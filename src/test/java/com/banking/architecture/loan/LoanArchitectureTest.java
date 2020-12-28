@@ -55,7 +55,7 @@ class LoanArchitectureTest {
                 .that()
                 .areAnnotatedWith(DomainRepository.class)
                 .should()
-                .resideInAPackage("..loan.infrastructure..")
+                .resideInAnyPackage("..loan.infrastructure..", "..loan.domain..")
                 .check(importedClasses);
     }
 
