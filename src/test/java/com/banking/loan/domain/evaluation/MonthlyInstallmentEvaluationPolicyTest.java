@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import org.junit.jupiter.api.Test;
 
 import com.banking.loan.api.contracts.LoanRequestEvaluationResult;
-import com.banking.loan.domain.LoanRequestValueObjectFactory;
+import com.banking.loan.domain.request.LoanRequestValueObjectFactory;
 
 class MonthlyInstallmentEvaluationPolicyTest {
     private MonthlyInstallmentEvaluationPolicy monthlyInstallmentEvaluationRule = new MonthlyInstallmentEvaluationPolicy(new LoanRequestValueObjectFactory());

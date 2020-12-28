@@ -5,7 +5,7 @@ import java.util.Set;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.banking.loan.domain.LoanRequestValueObjectFactory;
+import com.banking.loan.domain.request.LoanRequestValueObjectFactory;
 import com.banking.loan.infrastructure.circuitbreaker.LoanDebtorRegistryCircuitBreaker;
 
 @Configuration

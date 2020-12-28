@@ -3,8 +3,8 @@ package com.banking.loan.domain.evaluation;
 import java.math.BigDecimal;
 
 import com.banking.loan.api.contracts.LoanRequestEvaluationResult;
-import com.banking.loan.domain.LoanRequestValueObjectFactory;
-import com.banking.loan.domain.SingleInstallment;
+import com.banking.loan.domain.request.LoanRequestValueObjectFactory;
+import com.banking.loan.domain.request.SingleInstallment;
 
 class MonthlyInstallmentEvaluationPolicy implements LoanRequestEvaluationPolicy {
 

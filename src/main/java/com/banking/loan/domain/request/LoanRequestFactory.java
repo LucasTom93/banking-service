@@ -1,4 +1,4 @@
-package com.banking.loan.domain;
+package com.banking.loan.domain.request;
 
 import com.banking.loan.api.contracts.LoanRequestDto;
 import com.banking.shared.domain.annotations.DomainFactory;

@@ -8,7 +8,7 @@ import java.time.Month;
 import org.junit.jupiter.api.Test;
 
 import com.banking.loan.api.contracts.LoanRequestEvaluationResult;
-import com.banking.loan.domain.LoanRequestValueObjectFactory;
+import com.banking.loan.domain.request.LoanRequestValueObjectFactory;
 
 class CustomerAgeAfterAllInstallmentsEvaluationPolicyTest {
 

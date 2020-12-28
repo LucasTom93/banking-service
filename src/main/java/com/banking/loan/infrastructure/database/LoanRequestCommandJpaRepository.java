@@ -2,8 +2,8 @@ package com.banking.loan.infrastructure.database;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.banking.loan.domain.LoanRequest;
-import com.banking.loan.domain.LoanRequestCommandRepository;
+import com.banking.loan.domain.request.LoanRequest;
+import com.banking.loan.domain.request.LoanRequestCommandRepository;
 import com.banking.shared.domain.annotations.DomainRepository;
 
 @DomainRepository

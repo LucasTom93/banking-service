@@ -1,4 +1,4 @@
-package com.banking.loan.domain;
+package com.banking.loan.domain.request;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;

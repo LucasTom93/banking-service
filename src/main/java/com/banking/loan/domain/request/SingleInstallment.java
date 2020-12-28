@@ -1,8 +1,8 @@
-package com.banking.loan.domain;
+package com.banking.loan.domain.request;
 
-import static com.banking.loan.domain.LoanConstants.ANNUAL_LOAN_TAX_RATE;
-import static com.banking.loan.domain.LoanConstants.BIG_DECIMAL_SCALE;
-import static com.banking.loan.domain.LoanConstants.NUMBER_OF_INSTALLMENTS_IN_YEAR;
+import static com.banking.loan.domain.request.LoanConstants.ANNUAL_LOAN_TAX_RATE;
+import static com.banking.loan.domain.request.LoanConstants.BIG_DECIMAL_SCALE;
+import static com.banking.loan.domain.request.LoanConstants.NUMBER_OF_INSTALLMENTS_IN_YEAR;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

@@ -1,4 +1,4 @@
-package com.banking.loan.domain;
+package com.banking.loan.domain.request;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
